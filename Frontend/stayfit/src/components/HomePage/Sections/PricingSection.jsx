@@ -13,7 +13,7 @@ function PricingSection() {
         <div class="row justify-content-center">
           <div class="col-md-4 col-sm-6">
             <div class="pricing-card">
-              <div class="header">
+              <div class="heading">
                 <h3 class="title">1 Month</h3>
               </div>
               <div class="value">$59.99</div>
@@ -31,7 +31,7 @@ function PricingSection() {
           </div>
           <div class="col-md-4 col-sm-6">
             <div class="pricing-card">
-              <div class="header">
+              <div class="heading">
                 <h3 class="title">6 Months</h3>
               </div>
               <div class="value">$339.99</div>
@@ -49,7 +49,7 @@ function PricingSection() {
           </div>
           <div class="col-md-4 col-sm-6">
             <div class="pricing-card">
-              <div class="header">
+              <div class="heading">
                 <h3 class="title">1 Year</h3>
               </div>
               <div class="value">$659.99</div>

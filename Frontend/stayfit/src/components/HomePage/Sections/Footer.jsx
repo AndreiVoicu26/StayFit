@@ -61,7 +61,7 @@ function Footer() {
           </div>
           <div className="col-md">
             <div class="links mb-4">
-              <ul class="list-unstyled">
+              <ul class="list-unstyled px-4">
                 <li>
                   <a href="#coaches">
                     <i class="fa-solid fa-arrow-right"></i> Coaches
@@ -86,7 +86,7 @@ function Footer() {
             </div>
           </div>
           <div className="col-md">
-            <div class="contact-info mb-4">
+            <div class="contact-info mb-4 px-4">
               <h2>Have a question?</h2>
               <div class="mb-4">
                 <ul className="list-unstyled">

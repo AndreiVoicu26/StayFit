@@ -5,7 +5,7 @@ function HeroSection() {
     <div id="hero">
       <div className="home-slider js-fullheight owl-carousel">
         <div className="slider-item js-fullheight">
-          <div className="container-fluid p-0">
+          <div className="container-fluid p-0 gradient">
             <div
               className="row d-md-flex slider-text js-fullheight align-items-center justify-content-end"
               data-scrollax-parent="true"
