@@ -10,6 +10,12 @@ import Coaches from "./Customer/Coaches";
 import Workout from "./Customer/Workout";
 import Nutrition from "./Customer/Nutrition";
 import GymAccess from "./Customer/GymAccess";
+import Clients from "./Coach/Clients";
+import CoachProfile from "./Coach/CoachProfile";
+import ClientDashboard from "./Coach/ClientDashboard";
+import ClientTracker from "./Coach/ClientTracker";
+import ClientWorkout from "./Coach/ClientWorkout";
+import ClientNutrition from "./Coach/ClientNutrition";
 
 function App() {
   return (
@@ -27,6 +33,14 @@ function App() {
         <Route path="/workout" element={<Workout />} />
         <Route path="/nutrition" element={<Nutrition />} />
         <Route path="/gym-access" element={<GymAccess />} />
+
+        {/* Coach Routes */}
+        <Route path="/clients" element={<Clients />} />
+        <Route path="/coach-profile" element={<CoachProfile />} />
+        <Route path="/client/:id" element={<ClientDashboard />} />
+        <Route path="/client/:id/tracker" element={<ClientTracker />} />
+        <Route path="/client/:id/workout" element={<ClientWorkout />} />
+        <Route path="/client/:id/nutrition" element={<ClientNutrition />} />
       </Routes>
     </BrowserRouter>
   );
