@@ -9,12 +9,18 @@ import com.stayfit.backend.Workout.WorkoutPlan;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -30,17 +36,14 @@ public class Customer {
     @JoinColumn(name = "coach_id")
     private Coach coach;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private MembershipType membershipType;
 
-    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     @FutureOrPresent
     private LocalDate nextBillingDate;
-
-    @OneToOne
-    @JoinColumn(name = "payment_details_id", referencedColumnName = "id")
-    private PaymentDetails paymentDetails;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events;
