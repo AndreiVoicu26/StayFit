@@ -3,12 +3,35 @@ import Navbar from "./Navbar";
 import QRCode from "react-qr-code";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import axios from "axios";
 
 function Dashboard() {
   const [date, setDate] = useState(new Date());
   const [eventDialog, setEventDialog] = useState(false);
   const [events, setEvents] = useState([]);
   const [eventsForSelectedDate, setEventsForSelectedDate] = useState([]);
+  const [profile, setProfile] = useState({ firstName: "", lastName: "" });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/v1/customer/profile",
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setProfile(response.data);
+          profile.lastName = response.data.lastName;
+        }
+      } catch (error) {
+        console.log("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const onChange = (newDate) => {
     setDate(newDate);
@@ -86,8 +109,8 @@ function Dashboard() {
                   <div className="d-flex justify-content-center align-items-center">
                     <img src="../images/profile.jpg" alt="profile-picture" />
                     <div className="d-block ms-5 text-center">
-                      <h3 className="mb-0">Andrei</h3>
-                      <h3 className="mb-0">Voicu</h3>
+                      <h3 className="mb-0">{profile.firstName}</h3>
+                      <h3 className="mb-0">{profile.lastName}</h3>
                     </div>
                   </div>
                   <div className="text-center mt-3">
@@ -102,12 +125,14 @@ function Dashboard() {
             <div className="col-xl-4 mt-3">
               <div className="card">
                 <div className="card-body text-center">
-                  <Calendar
-                    onChange={onChange}
-                    value={date}
-                    locale="en-US"
-                    tileClassName={tileClassName}
-                  />
+                  <div className="d-flex justify-content-center">
+                    <Calendar
+                      onChange={onChange}
+                      value={date}
+                      locale="en-US"
+                      tileClassName={tileClassName}
+                    />
+                  </div>
                   <button
                     className="btn btn-primary mt-5 p-3"
                     onClick={() => setEventDialog(true)}

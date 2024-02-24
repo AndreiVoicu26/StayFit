@@ -1403,6 +1403,7 @@ p {
 /* SignIn & SignUp */
 
 .auth {
+  overflow-x: hidden;
   padding: 3em 0;
   position: relative;
   width: 100%;
@@ -1568,21 +1569,10 @@ p {
 .radio-button:checked + .radio-tile {
   background-color: #fff;
 }
-.auth .login-card .validated {
+.auth .login-card .success {
+  color: white !important;
   background-color: green;
-}
-.auth .login-card .validated:hover {
-  background-color: green;
-  border: 2px solid green;
-  color: #000000 !important;
-}
-.auth .login-card .not-validated {
-  background-color: red;
-}
-.auth .login-card .not-validated:hover {
-  background-color: red;
-  border: 2px solid red;
-  color: #000000 !important;
+  border-radius: 40px;
 }
 
 /* Header & Sidebar */

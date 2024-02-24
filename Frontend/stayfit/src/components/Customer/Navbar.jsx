@@ -7,10 +7,25 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useAuth } from "../Auth/AuthProvider";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 
 function Navbar() {
   const location = useLocation();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const { logout } = useAuth();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const isLinkActive = (to) => {
     return location.pathname === to;
@@ -85,9 +100,21 @@ function Navbar() {
               </Link>
             </div>
           </div>
-          <Link to="/" className={`nav_link ${isLinkActive("/") && "active"}`}>
+          <Link
+            onClick={handleClickOpen}
+            className={`nav_link ${isLinkActive("/") && "active"}`}
+          >
             <LogoutIcon /> <span>Log Out</span>
           </Link>
+          <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>Are you sure you want to log out?</DialogTitle>
+            <DialogActions>
+              <Button onClick={handleClose}>No</Button>
+              <Button onClick={() => logout()} autoFocus>
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
         </nav>
       </div>
     </div>

@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuth } from "../../Auth/AuthProvider";
 
 function Navbar() {
+  const { authenticated, role, checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-scrolled" id="navbar">
       <div className="container-xl">
@@ -58,7 +65,16 @@ function Navbar() {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/login">
+              <a
+                className="nav-link"
+                href={
+                  authenticated
+                    ? role === "CUSTOMER"
+                      ? "/dashboard"
+                      : "/clients"
+                    : "/login"
+                }
+              >
                 <span>
                   <i className="bi bi-person-circle"></i>
                 </span>
