@@ -4,12 +4,18 @@ import com.stayfit.backend.Customer.Customer;
 import com.stayfit.backend.User.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Set;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "coaches")
 public class Coach {
@@ -24,7 +30,9 @@ public class Coach {
     @OneToMany(mappedBy = "coach")
     private Set<Customer> customers;
 
-    @NotNull
-    @Length(min = 20)
+    @Column(name = "qualification", nullable = false)
+    private String qualification;
+
+    @Column(name = "description")
     private String description;
 }

@@ -20,8 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.stayfit.backend.User.Role.COACH;
-import static com.stayfit.backend.User.Role.CUSTOMER;
+import static com.stayfit.backend.User.Role.*;
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/api/v1/customer/**").hasRole(CUSTOMER.name())
                         .requestMatchers("/api/v1/coach/**").hasRole(COACH.name())
+                        .requestMatchers("/api/v1/admin/**").hasRole(SYS_ADMIN.name())
                         .requestMatchers("/api/v1/auth/refresh-token").hasAnyRole(CUSTOMER.name(), COACH.name())
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()

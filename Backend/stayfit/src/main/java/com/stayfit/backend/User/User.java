@@ -47,7 +47,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Email
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Lob
@@ -56,7 +56,7 @@ public class User implements UserDetails {
     private byte[] profilePicture;
 
     @Pattern(regexp = "^[0-9]{10,15}$")
-    @Column(name = "phone", unique = true)
+    @Column(name = "phone")
     private String phone;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")

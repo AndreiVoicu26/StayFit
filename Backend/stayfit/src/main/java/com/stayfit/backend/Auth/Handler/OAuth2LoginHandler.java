@@ -5,6 +5,7 @@ import com.stayfit.backend.Auth.JwtService;
 import com.stayfit.backend.Customer.Customer;
 import com.stayfit.backend.Customer.CustomerRepository;
 import com.stayfit.backend.Customer.Status;
+import com.stayfit.backend.Exception.UserAlreadyExistsException;
 import com.stayfit.backend.Exception.UserNotFoundException;
 import com.stayfit.backend.User.Role;
 import com.stayfit.backend.User.User;
@@ -33,15 +34,18 @@ public class OAuth2LoginHandler extends SavedRequestAwareAuthenticationSuccessHa
         String username;
         String firstName;
         String lastName;
+        String email;
 
         if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
             username = oidcUser.getSubject();
             firstName = oidcUser.getGivenName();
             lastName = oidcUser.getFamilyName();
+            email = oidcUser.getEmail();
         } else if (authentication.getPrincipal() instanceof OAuth2User oAuth2User) {
             username = oAuth2User.getAttribute("id");
             firstName = Objects.requireNonNull(oAuth2User.getAttribute("name")).toString().split(" ")[0];
             lastName = Objects.requireNonNull(oAuth2User.getAttribute("name")).toString().split(" ")[1];
+            email = Objects.requireNonNull(oAuth2User.getAttribute("email"));
         } else {
             throw new RuntimeException("Unsupported OAuth2 user");
         }
@@ -72,8 +76,14 @@ public class OAuth2LoginHandler extends SavedRequestAwareAuthenticationSuccessHa
                     .firstName(firstName)
                     .lastName(lastName)
                     .username(username)
+                    .email(email)
                     .role(Role.CUSTOMER)
                     .build();
+
+            if (userRepository.existsByEmail(user.getEmail())) {
+                throw new UserAlreadyExistsException("A user with email " + user.getEmail() + " already exists");
+            }
+
             userRepository.save(user);
 
             var customer = Customer
