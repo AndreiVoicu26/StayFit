@@ -119,6 +119,8 @@ const AuthProvider = ({ children }) => {
           }
         } else if (response.data.role === "COACH") {
           navigate("/clients");
+        } else if (response.data.role === "SYS_ADMIN") {
+          navigate("/management");
         }
         console.log("Login successful!");
       } else {
@@ -155,7 +157,6 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (!["/", "/login", "/register", "/payment"].includes(location.pathname)) {
       checkAuth();
-      checkStatus();
     }
   }, [location.pathname]);
 

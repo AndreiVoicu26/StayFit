@@ -20,6 +20,7 @@ import ClientDashboard from "./Coach/ClientDashboard";
 import ClientTracker from "./Coach/ClientTracker";
 import ClientWorkout from "./Coach/ClientWorkout";
 import ClientNutrition from "./Coach/ClientNutrition";
+import AdminDashboard from "./Admin/AdminDashboard";
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
             <Route path="/client/:id/tracker" element={<ClientTracker />} />
             <Route path="/client/:id/workout" element={<ClientWorkout />} />
             <Route path="/client/:id/nutrition" element={<ClientNutrition />} />
+          </Route>
+          {/* Admin Routes */}
+          <Route element={<ProtectedRoute role="SYS_ADMIN" />}>
+            <Route path="/management" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </AuthProvider>

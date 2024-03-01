@@ -20,7 +20,7 @@ function Register() {
   });
   const [formErrors, setFormErrors] = useState({});
   const navigate = useNavigate();
-  const { authenticated, register, logout, checkAuth } = useAuth();
+  const { authenticated, register, logout, checkAuth, role } = useAuth();
 
   useEffect(() => {
     checkAuth();
@@ -191,7 +191,19 @@ function Register() {
                   <h3 className="text-center mt-3">or</h3>
                   <Button
                     className="form-control btn btn-primary px-3 mb-5"
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => {
+                      switch (role) {
+                        case "CUSTOMER":
+                          navigate("/dashboard");
+                          break;
+                        case "COACH":
+                          navigate("/clients");
+                          break;
+                        case "SYS_ADMIN":
+                          navigate("/management");
+                          break;
+                      }
+                    }}
                   >
                     Go to Dashboard
                   </Button>

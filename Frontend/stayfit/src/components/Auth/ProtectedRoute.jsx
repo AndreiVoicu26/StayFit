@@ -1,7 +1,6 @@
 import { React, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthProvider.jsx";
-import { checkboxClasses } from "@mui/material";
 
 const ProtectedRoute = (props) => {
   const { authenticated, role, status, loading } = useAuth();
@@ -10,7 +9,9 @@ const ProtectedRoute = (props) => {
     return null;
   }
 
-  return authenticated && role === props.role && status !== "INACTIVE" ? (
+  return authenticated &&
+    role === props.role &&
+    !(role === "CUSTOMER" && status === "INACTIVE") ? (
     <Outlet />
   ) : (
     <Navigate to="/login" />

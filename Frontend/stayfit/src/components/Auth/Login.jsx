@@ -19,7 +19,7 @@ function Login() {
   const [authUnsuccessful, setAuthUnsuccessful] = useState(false);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const { authenticated, login, logout, checkAuth } = useAuth();
+  const { authenticated, login, logout, checkAuth, role } = useAuth();
 
   const handleSignIn = () => {
     login(formData).catch((error) => {
@@ -134,9 +134,21 @@ function Login() {
                 <h3 className="text-center mt-3">or</h3>
                 <Button
                   className="form-control btn btn-primary px-3 mb-5"
-                  onClick={() => navigate("/dashboard")}
+                  onClick={() => {
+                    switch (role) {
+                      case "CUSTOMER":
+                        navigate("/dashboard");
+                        break;
+                      case "COACH":
+                        navigate("/clients");
+                        break;
+                      case "SYS_ADMIN":
+                        navigate("/management");
+                        break;
+                    }
+                  }}
                 >
-                  Go to Dashboard
+                  Go to your account
                 </Button>
               </div>
             ) : (
