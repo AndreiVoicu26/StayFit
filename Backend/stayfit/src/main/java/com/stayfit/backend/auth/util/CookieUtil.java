@@ -40,6 +40,14 @@ public class CookieUtil {
                 .findFirst()
                 .orElseThrow(() -> new CookieNotFoundException("Cookie with name " + name + " not found"))
                 .getValue();
+    }
 
+    public static boolean exists(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) {
+            return false;
+        }
+
+        return Arrays.stream(request.getCookies())
+                .anyMatch(cookie -> cookie.getName().equals(name));
     }
 }

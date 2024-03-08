@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
@@ -12,12 +12,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import axios from "axios";
 
 function Navbar() {
   const location = useLocation();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const { logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const [picture, setPicture] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,6 +32,29 @@ function Navbar() {
   const isLinkActive = (to) => {
     return location.pathname === to;
   };
+
+  const fetchPicture = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/user/picture",
+        {
+          responseType: "blob",
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        if (response.data.size !== 0) {
+          setPicture(response.data);
+        }
+      }
+    } catch (error) {
+      console.log("Error fetching picture ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPicture();
+  }, []);
 
   return (
     <div>
@@ -45,12 +70,16 @@ function Navbar() {
           ></i>
         </div>
         <div class="img">
-          <a href="/profile">
+          <Link to="/profile">
             <img
-              src="https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg"
+              src={
+                picture
+                  ? URL.createObjectURL(picture)
+                  : "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg"
+              }
               alt="profile-picture"
             />
-          </a>
+          </Link>
         </div>
       </header>
       <div id="sidebar" className={`sidebar ${isSidebarVisible && "show"}`}>

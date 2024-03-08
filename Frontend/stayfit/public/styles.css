@@ -1603,6 +1603,7 @@ p {
   justify-content: center;
   border-radius: 50%;
   overflow: hidden;
+  object-fit: cover;
 }
 .sidebar {
   position: fixed;
@@ -1987,12 +1988,18 @@ p {
 }
 
 /* Edit Profile */
+#profile .heading {
+  background-image: linear-gradient(to right, #cd3f3e 0%, #1c2938 100%);
+  padding: 1rem 0 3rem;
+}
+#profile .sections {
+  margin-top: -3rem;
+}
 #profile .section.top {
   margin-top: 80px;
 }
 #profile .section h1 {
   color: #1c2938;
-  border-bottom: 1px solid #1c2938;
 }
 @media (min-width: 1537px) {
   #profile .card {
@@ -2001,6 +2008,9 @@ p {
 }
 #profile .profile-picture img {
   border-radius: 50%;
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
 }
 #profile .card {
   box-shadow: 0 0 20px 0 rgb(28, 41, 56, 0.9);

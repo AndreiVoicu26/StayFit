@@ -364,12 +364,9 @@ function AdminDashboard() {
                                   onClick={() =>
                                     handleCustomerStatus(customer.id)
                                   }
+                                  disabled={customer.status === "INACTIVE"}
                                 >
-                                  {customer.status === "ACTIVE" ? (
-                                    <i className="fa-solid fa-user-minus d-flex align-items-center fs-3"></i>
-                                  ) : (
-                                    <i className="fa-solid fa-user-plus d-flex align-items-center fs-3"></i>
-                                  )}
+                                  <i className="fa-solid fa-user-minus d-flex align-items-center fs-3"></i>
                                 </button>
                                 <button className="ms-1">
                                   <i className="fa-solid fa-pen-to-square d-flex align-items-center fs-3"></i>

@@ -13,6 +13,7 @@ import com.stayfit.backend.user.Role;
 import com.stayfit.backend.user.User;
 import com.stayfit.backend.user.UserRepository;
 import com.stayfit.backend.user.UserService;
+import com.stayfit.backend.user.request.CredentialsRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -72,16 +73,16 @@ public class AuthenticationService {
         CookieUtil.createCookie(response, "userId", request.getUsername(), true);
     }
 
-    public Map<String, String> login(LoginRequest request, HttpServletResponse response) {
+    public Map<String, String> login(LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
                 )
         );
 
-        var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new UserNotFoundException("User with username " + request.getUsername() + " not found"));
+        var user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User with username " + loginRequest.getUsername() + " not found"));
 
         var accessToken = jwtService.generateAccessToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -91,6 +92,9 @@ public class AuthenticationService {
         if (user.getRole().equals(Role.CUSTOMER)) {
             var customer = customerRepository.findByUser(user)
                     .orElseThrow(() -> new CustomerNotFoundException("Customer with username " + user.getUsername() + " not found"));
+            if (customer.getStatus().equals(Status.INACTIVE) && !CookieUtil.exists(request, "userId") ){
+                CookieUtil.createCookie(response, "userId", loginRequest.getUsername(), true);
+            }
             return Map.of("role", Role.CUSTOMER.toString(), "status", String.valueOf(customer.getStatus()));
         } else {
             return Map.of("role", user.getRole().toString(), "status", "");
@@ -170,10 +174,14 @@ public class AuthenticationService {
                 User user = userRepository.findByUsername(username)
                         .orElseThrow(() -> new RuntimeException("User " + username + " not found"));
 
-                Customer customer = customerRepository.findByUser(user)
-                        .orElseThrow(() -> new RuntimeException("Customer " + username + " not found"));
+                if(customerRepository.existsByUser(user)) {
+                    Customer customer = customerRepository.findByUser(user)
+                            .orElseThrow(() -> new RuntimeException("Customer " + username + " not found"));
 
-                return customer.getStatus();
+                    return customer.getStatus();
+                } else {
+                    return null;
+                }
             }
         } else {
             return null;
@@ -240,6 +248,35 @@ public class AuthenticationService {
         user.setResetPasswordTokenExpiry(null);
 
         userRepository.save(user);
+
+        return true;
+    }
+
+    public boolean updateCredentials(CredentialsRequest credentials, HttpServletRequest request, HttpServletResponse response) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        username,
+                        credentials.getCurrentPassword()
+                )
+        );
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+
+        if(!credentials.getNewUsername().isEmpty()) {
+            user.setUsername(credentials.getNewUsername());
+        }
+
+        if(!credentials.getNewPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(credentials.getNewPassword()));
+        }
+
+        userRepository.save(user);
+
+        CookieUtil.clearCookies(request, response);
+        SecurityContextHolder.clearContext();
 
         return true;
     }

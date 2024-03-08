@@ -24,6 +24,7 @@ const AuthProvider = ({ children }) => {
   const location = useLocation();
 
   const checkAuth = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost:8080/api/v1/auth/check-authentication",
@@ -40,6 +41,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const checkStatus = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         "http://localhost:8080/api/v1/auth/check-status",
@@ -157,17 +159,9 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (!["/", "/login", "/register", "/payment"].includes(location.pathname)) {
       checkAuth();
+      checkStatus();
     }
   }, [location.pathname]);
-
-  // useEffect(() => {
-  //   if (
-  //     authenticated &&
-  //     (location.pathname === "/login" || location.pathname === "/register")
-  //   ) {
-  //     navigate("/dashboard");
-  //   }
-  // }, [location.pathname]);
 
   return (
     <AuthContext.Provider

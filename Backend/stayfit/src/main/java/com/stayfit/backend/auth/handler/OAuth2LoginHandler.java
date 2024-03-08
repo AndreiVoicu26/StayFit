@@ -59,6 +59,9 @@ public class OAuth2LoginHandler extends SavedRequestAwareAuthenticationSuccessHa
             var customer = customerRepository.findByUser(user)
                     .orElseThrow(() -> new RuntimeException("Customer " + username + " not found"));
             if(String.valueOf(customer.getStatus()).equals("INACTIVE")) {
+                if(!CookieUtil.exists(request, "userId")) {
+                    CookieUtil.createCookie(response, "userId", username, true);
+                }
                 getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000/payment");
                 return;
             }

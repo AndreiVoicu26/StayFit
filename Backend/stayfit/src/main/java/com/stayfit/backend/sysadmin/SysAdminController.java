@@ -50,15 +50,10 @@ public class SysAdminController {
     }
 
     @PutMapping("/customer/{id}")
-    public ResponseEntity<?> activateOrDeactivateCustomer(@PathVariable Long id) {
-        Status status = sysAdminService.switchCustomerStatus(id);
+    public ResponseEntity<?> deactivateCustomer(@PathVariable Long id) {
+        sysAdminService.deactivateCustomer(id);
 
-        if(status == Status.ACTIVE) {
-            return ResponseEntity.ok().body("Customer has been activated successfully");
-        }
-        else {
-            return ResponseEntity.ok().body("Customer has been deactivated successfully");
-        }
+        return ResponseEntity.ok().body("Customer has been deactivated successfully");
     }
 
 

@@ -8,6 +8,7 @@ import com.stayfit.backend.customer.CustomerRepository;
 import com.stayfit.backend.user.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -42,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/customer/**").hasRole(CUSTOMER.name())
                         .requestMatchers("/api/v1/coach/**").hasRole(COACH.name())
                         .requestMatchers("/api/v1/admin/**").hasRole(SYS_ADMIN.name())
+                        .requestMatchers("/api/v1/user/**").hasAnyRole(CUSTOMER.name(), COACH.name())
                         .requestMatchers("/api/v1/auth/refresh-token").hasAnyRole(CUSTOMER.name(), COACH.name())
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()

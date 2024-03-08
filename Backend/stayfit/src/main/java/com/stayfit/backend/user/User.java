@@ -8,10 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.imageio.ImageTypeSpecifier;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
@@ -56,7 +58,6 @@ public class User implements UserDetails {
     @Column(name = "phone")
     private String phone;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Past
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;

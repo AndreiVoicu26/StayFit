@@ -107,16 +107,13 @@ public class SysAdminService {
         userRepository.deleteById(customer.getUser().getId());
     }
 
-    public Status switchCustomerStatus(Long id) {
+    public void deactivateCustomer(Long id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
-        if (customer.getStatus().equals(Status.INACTIVE) && customer.getMembershipType() != null) {
-            customer.setStatus(Status.ACTIVE);
-        } else {
-            customer.setStatus(Status.INACTIVE);
-        }
+
+        customer.setStatus(Status.INACTIVE);
+        customer.setMembershipType(null);
+        customer.setNextBillingDate(null);
 
         customerRepository.save(customer);
-
-        return customer.getStatus();
     }
 }

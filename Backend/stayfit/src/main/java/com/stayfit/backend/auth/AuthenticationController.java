@@ -32,10 +32,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request, HttpServletResponse response) {
         authenticationService.checkIfUserLoggedIn();
 
-        Map<String, String> res = authenticationService.login(request, response);
+        Map<String, String> res = authenticationService.login(loginRequest, request, response);
 
         return ResponseEntity.ok().body(res);
     }
