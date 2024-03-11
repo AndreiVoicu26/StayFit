@@ -3,12 +3,18 @@ package com.stayfit.backend.event;
 import com.stayfit.backend.customer.Customer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {
@@ -24,7 +30,6 @@ public class Event {
 
     private String details;
 
-    @URL
     private String link;
 
     private Boolean isCancelled;

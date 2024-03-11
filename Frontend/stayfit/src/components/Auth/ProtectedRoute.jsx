@@ -3,8 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthProvider.jsx";
 
 const ProtectedRoute = (props) => {
-  const { authenticated, role, status, loading, checkAuth, checkStatus } =
-    useAuth();
+  const { authenticated, role, status, loading } = useAuth();
 
   if (loading) {
     return null;
@@ -12,7 +11,7 @@ const ProtectedRoute = (props) => {
 
   if (authenticated && role === props.role) {
     if (role === "CUSTOMER") {
-      if (status === "ACTIVE") {
+      if (status !== "INACTIVE") {
         return <Outlet />;
       } else {
         return <Navigate to="/payment" />;

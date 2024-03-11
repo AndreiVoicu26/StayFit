@@ -1728,8 +1728,8 @@ p {
 }
 #dashboard .profile img {
   border-radius: 50%;
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
 }
 #dashboard .active {
@@ -1923,7 +1923,7 @@ p {
 /* Event Dialog */
 
 #dashboard .dialog {
-  padding: 30px 0;
+  padding: 10px 0;
   background: #f4f6f6;
 }
 #dashboard .dialog.card {
@@ -1940,7 +1940,7 @@ p {
   font-size: 28px;
 }
 #dashboard .dialog .form-container {
-  margin-top: 15%;
+  margin-top: 10px;
 }
 #dashboard .dialog .form-label {
   text-transform: uppercase;
@@ -2161,22 +2161,12 @@ p {
 }
 #coaching .role {
   position: relative;
-  margin: 0 0 30px;
+  margin: 0 0 10px;
   color: #cd3f3e;
   text-align: center;
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    margin-left: -15px;
-    width: 30px;
-    height: 1px;
-    background: #1c2938;
-  }
 }
 #coaching .description p {
-  padding: 0 1rem 2rem;
+  padding: 0 1rem 1rem;
   text-align: center;
   line-height: 1.5;
   color: #777;

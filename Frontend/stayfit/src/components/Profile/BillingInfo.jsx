@@ -113,7 +113,7 @@ function BillingInfo() {
                   href="#"
                   onClick={() => handleChangeMembership("ONE_MONTH")}
                 >
-                  Switch to monthly billing - $59.99 / month
+                  Switch to monthly plan - $59.99 / month
                   <i class="fa-solid fa-arrow-right-long ms-2"></i>
                 </a>
               )}
@@ -124,7 +124,7 @@ function BillingInfo() {
                   href="#"
                   onClick={() => handleChangeMembership("SIX_MONTHS")}
                 >
-                  Switch to 6 months billing - $329.99 / 6 months
+                  Switch to 6 months plan - $329.99 / 6 months
                   <i class="fa-solid fa-arrow-right-long ms-2"></i>
                 </a>
               )}
@@ -135,7 +135,7 @@ function BillingInfo() {
                   href="#"
                   onClick={() => handleChangeMembership("ONE_YEAR")}
                 >
-                  Switch to yearly billing - $599.99 / year
+                  Switch to yearly plan - $599.99 / year
                   <i class="fa-solid fa-arrow-right-long ms-2"></i>
                 </a>
               )}

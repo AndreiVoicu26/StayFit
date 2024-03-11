@@ -1,7 +1,9 @@
 package com.stayfit.backend.customer;
 
 import com.stayfit.backend.auth.request.PaymentRequest;
+import com.stayfit.backend.coach.Coach;
 import com.stayfit.backend.customer.request.BillingInfoRequest;
+import com.stayfit.backend.customer.request.EventRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,16 +21,6 @@ import java.util.Map;
 public class CustomerController {
 
     private final CustomerService customerService;
-
-    @GetMapping("/profile")
-    public ResponseEntity<?> getCustomerProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        Map<String, ?> response = customerService.getCustomerProfile(username);
-
-        return ResponseEntity.ok(response);
-    }
 
     @GetMapping("/billing")
     public ResponseEntity<?> getBillingInfo() {
@@ -62,5 +55,67 @@ public class CustomerController {
         boolean response = customerService.checkIfOauth2User();
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/coaches")
+    public ResponseEntity<?> getCoaches() {
+        List<?> response = customerService.getCoaches();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/coaches/{coachId}")
+    public ResponseEntity<?> chooseCoach(@PathVariable Long coachId) {
+        customerService.saveCoach(coachId);
+
+        return ResponseEntity.ok("Coach chosen successfully!");
+    }
+
+    @GetMapping("/coach")
+    public ResponseEntity<?> getCoach() {
+        Map<String, ?> response = customerService.getCoach();
+
+        if(response.isEmpty()) {
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/coach")
+    public ResponseEntity<?> removeCoach() {
+        customerService.removeCoach();
+
+        return ResponseEntity.ok("Coach removed successfully!");
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Map<String, ?> response = customerService.getProfile(username);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/event")
+    public ResponseEntity<?> createEvent(@RequestBody EventRequest event) {
+        customerService.createEvent(event);
+
+        return ResponseEntity.ok("Event created successfully");
+    }
+
+    @GetMapping("/events")
+    public ResponseEntity<?> getEvents() {
+        List<?> response = customerService.getEvents();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/event/{eventId}")
+    public ResponseEntity<?> updateEvent(@PathVariable Long eventId, @RequestBody EventRequest event) {
+        customerService.updateEvent(eventId, event);
+
+        return ResponseEntity.ok("Event updated successfully");
     }
 }

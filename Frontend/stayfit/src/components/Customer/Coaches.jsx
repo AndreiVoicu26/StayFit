@@ -1,38 +1,78 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
+import axios from "axios";
 
 function Coaches() {
-  const [coach, setCoach] = useState(null);
+  const [personalCoach, setPersonalCoach] = useState(null);
+  const [coaches, setCoaches] = useState([]);
 
-  const coachesData = [
-    {
-      id: 1,
-      name: "Michael Hall",
-      role: "Owner & Head Coach",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      imageUrl:
-        "https://www.personaltrainercentral.com/images/fit_happy_fitness_trainer.jpg",
-    },
-    {
-      id: 2,
-      name: "Omar Davies",
-      role: "Expert Trainer",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      imageUrl:
-        "https://media.licdn.com/dms/image/C5603AQHtdN2eLpF6yg/profile-displayphoto-shrink_800_800/0/1663502946313?e=2147483647&v=beta&t=qlibuPJP6tTNYq_9w6uxiAdWdXWnbMOUTzyfsl3LUbE",
-    },
-    {
-      id: 3,
-      name: "Amelia Jackson",
-      role: "Expert Nutritionist",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1585358682246-23acb1561f6b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bnV0cml0aW9uaXN0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-    },
-  ];
+  const fetchCoaches = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/customer/coaches",
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setCoaches(response.data);
+        console.log("Coaches fetched successfully");
+      }
+    } catch (error) {
+      console.error("Error fetching coaches", error);
+    }
+  };
+
+  const fetchPersonalCoach = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/customer/coach",
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        if (response.data !== "") {
+          setPersonalCoach(response.data);
+          console.log("Personal coach fetched successfully");
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching personal coach", error);
+    }
+  };
+
+  const handleChooseCoach = async (id) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/customer/coaches/${id}`,
+        {},
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        console.log("Coach chosen successfully");
+        fetchPersonalCoach();
+      }
+    } catch (error) {
+      console.error("Error choosing coach", error);
+    }
+  };
+
+  const handleRemoveCoach = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/v1/customer/coach`,
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        console.log("Coach deleted successfully");
+        fetchPersonalCoach();
+      }
+    } catch (error) {
+      console.error("Error deleting coach", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCoaches();
+    fetchPersonalCoach();
+  }, []);
 
   return (
     <div>
@@ -48,13 +88,16 @@ function Coaches() {
             </div>
           </div>
         </div>
-        {coach ? (
+        {personalCoach ? (
           <div className="container px-4 sections">
             <div className="row ms-md-5">
               <div className="col-xl-12 mt-3">
                 <div className="card">
                   <div className="card-header">
-                    <h3 className="mb-0">Your coach is {coach.name}</h3>
+                    <h3 className="mb-0">
+                      Your coach is {personalCoach.firstName}{" "}
+                      {personalCoach.lastName}
+                    </h3>
                   </div>
                   <div className="card-body">
                     <h5 className="mb-0 top d-flex">
@@ -70,16 +113,36 @@ function Coaches() {
                 <div className="card">
                   <header>
                     <div class="img profile">
-                      <img src={coach.imageUrl}></img>
+                      <img
+                        src={
+                          personalCoach.profilePicture
+                            ? `data:image/jpeg;base64,${personalCoach.profilePicture}`
+                            : "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg"
+                        }
+                      />
                     </div>
                   </header>
-                  <h3 className="name">{coach.name}</h3>
-                  <h5 className="role">{coach.role}</h5>
+                  <h3 className="name">
+                    {personalCoach.firstName} {personalCoach.lastName}
+                  </h3>
+                  <h5 className="role">{personalCoach.qualification}</h5>
+                  <hr className="w-50 mx-auto mt-1" />
                   <div class="description">
-                    <p>{coach.description}</p>
+                    <p>{personalCoach.description}</p>
                   </div>
+                  <hr className="w-50 mx-auto" />
+                  <h6 className="text-center">Email: {personalCoach.email}</h6>
+                  <h6 className="text-center mb-3">
+                    Phone:{" "}
+                    {personalCoach.phone
+                      ? personalCoach.phone
+                      : "Not available"}
+                  </h6>
                   <div class="text-center choose">
-                    <a href="#" onClick={() => setCoach(null)}>
+                    <a
+                      href=""
+                      onClick={() => handleRemoveCoach(personalCoach.id)}
+                    >
                       <i class="fa fa-minus"></i>
                     </a>
                   </div>
@@ -122,21 +185,36 @@ function Coaches() {
               </div>
             </div>
             <div className="row align-items-stretch ms-md-5">
-              {coachesData.map((coach) => (
+              {coaches.map((coach) => (
                 <div className="col-xl-4 mt-3 mb-3" key={coach.id}>
                   <div className="card">
                     <header>
                       <div className="img profile">
-                        <img src={coach.imageUrl} alt={coach.name} />
+                        <img
+                          src={
+                            coach.profilePicture
+                              ? `data:image/jpeg;base64,${coach.profilePicture}`
+                              : "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg"
+                          }
+                          alt={coach.profilePicture}
+                        />
                       </div>
                     </header>
-                    <h3 className="name">{coach.name}</h3>
-                    <h5 className="role">{coach.role}</h5>
+                    <h3 className="name">
+                      {coach.firstName} {coach.lastName}
+                    </h3>
+                    <h5 className="role">{coach.qualification}</h5>
+                    <hr className="w-50 mx-auto mt-1" />
                     <div className="description">
                       <p>{coach.description}</p>
                     </div>
+                    <hr className="w-50 mx-auto" />
+                    <h6 className="text-center">Email: {coach.email}</h6>
+                    <h6 className="text-center mb-3">
+                      Phone: {coach.phone ? coach.phone : "Not available"}
+                    </h6>
                     <div className="text-center choose">
-                      <a href="#" onClick={() => setCoach(coach)}>
+                      <a href="" onClick={() => handleChooseCoach(coach.id)}>
                         <i className="fa fa-plus"></i>
                       </a>
                     </div>

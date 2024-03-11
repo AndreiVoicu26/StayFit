@@ -1,63 +1,43 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Clients() {
-  const initialClients = [
-    {
-      id: 1,
-      name: "Andrei Voicu",
-      imageUrl:
-        "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg",
-    },
-    {
-      id: 2,
-      name: "Liam Johnson",
-      imageUrl:
-        "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg",
-    },
-    {
-      id: 3,
-      name: "Olivia Smith",
-      imageUrl:
-        "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg",
-    },
-    {
-      id: 4,
-      name: "Ethan Davis",
-      imageUrl:
-        "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg",
-    },
-    {
-      id: 5,
-      name: "Anastasia Brown",
-      imageUrl:
-        "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg",
-    },
-    {
-      id: 6,
-      name: "Noah Taylor",
-      imageUrl:
-        "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg",
-    },
-    {
-      id: 7,
-      name: "Sophia Martinez",
-      imageUrl:
-        "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg",
-    },
-  ];
-
-  const [clients, setClients] = useState(initialClients);
+  const [clients, setClients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleFilter = () => {
-    const filteredClients = initialClients.filter((client) =>
-      client.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredClients = clients.filter((client) =>
+      (client.firstName + " " + client.lastName)
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
     );
+    console.log(clients);
     setClients(filteredClients);
   };
+
+  const fetchClients = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/coach/clients",
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setClients(response.data);
+        console.log("Clients fetched successfully");
+      }
+    } catch (error) {
+      console.error("Error fetching clients", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchClients();
+  }, [searchQuery]);
 
   return (
     <div>
@@ -87,9 +67,9 @@ function Clients() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-primary ms-2"
-                    onClick={handleFilter}
+                    onClick={() => handleFilter()}
                   >
                     Filter
                   </button>
@@ -102,9 +82,7 @@ function Clients() {
               <div>
                 <div className="card">
                   <div className="card-header text-center">
-                    <h3 className="mb-0">
-                      No client found for the specified name
-                    </h3>
+                    <h3 className="mb-0">No clients found</h3>
                   </div>
                 </div>
               </div>
@@ -119,9 +97,16 @@ function Clients() {
                         <div className="card user">
                           <div className="card-body text-center">
                             <div className="img profile mb-2">
-                              <img src={client.imageUrl}></img>
+                              <img
+                                src={
+                                  client.profilePicture
+                                    ? `data:image/jpeg;base64,${client.profilePicture}`
+                                    : "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg"
+                                }
+                              />
                             </div>
-                            <h3 className="mb-0">{client.name}</h3>
+                            <h3 className="mb-0">{client.firstName}</h3>
+                            <h3 className="mb-0">{client.lastName}</h3>
                           </div>
                         </div>
                       </Link>

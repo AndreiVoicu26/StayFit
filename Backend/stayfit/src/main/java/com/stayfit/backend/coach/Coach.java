@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -26,7 +27,7 @@ public class Coach {
     private User user;
 
     @OneToMany(mappedBy = "coach")
-    private Set<Customer> customers;
+    private List<Customer> customers;
 
     @Column(name = "qualification", nullable = false)
     private String qualification;

@@ -52,6 +52,8 @@ public class Customer {
 
     private Double targetWeight;
 
+    private Integer targetWorkout;
+
     private Integer targetCalories;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

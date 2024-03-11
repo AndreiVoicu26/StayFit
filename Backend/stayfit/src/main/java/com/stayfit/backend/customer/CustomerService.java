@@ -2,20 +2,26 @@ package com.stayfit.backend.customer;
 
 import com.stayfit.backend.auth.request.PaymentRequest;
 import com.stayfit.backend.auth.util.CookieUtil;
+import com.stayfit.backend.coach.Coach;
+import com.stayfit.backend.coach.CoachRepository;
 import com.stayfit.backend.customer.request.BillingInfoRequest;
+import com.stayfit.backend.customer.request.EventRequest;
+import com.stayfit.backend.event.Event;
 import com.stayfit.backend.exception.UserNotFoundException;
 import com.stayfit.backend.user.User;
 import com.stayfit.backend.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,19 +29,7 @@ public class CustomerService {
 
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
-
-    public Map<String, Object> getCustomerProfile(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User " + username + " not found"));
-
-        Map<String, Object> profile = new HashMap<>();
-        profile.put("firstName", user.getFirstName());
-        profile.put("lastName", user.getLastName());
-        profile.put("profilePicture", user.getProfilePicture());
-
-        return profile;
-    }
-
+    private final CoachRepository coachRepository;
 
     public BillingInfoRequest getBillingInfo() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -106,5 +100,166 @@ public class CustomerService {
                 .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
 
         return user.getPassword() == null;
+    }
+
+    public List<?> getCoaches() {
+        List<Coach> coaches = coachRepository.findAll();
+        List<Map<String, String>> users = new ArrayList<>(Collections.emptyList());
+
+        for (Coach coach : coaches) {
+            Map<String, String> user = Map.of(
+                    "id", String.valueOf(coach.getId()),
+                    "firstName", coach.getUser().getFirstName(),
+                    "lastName", coach.getUser().getLastName(),
+                    "qualification", coach.getQualification(),
+                    "email", coach.getUser().getEmail(),
+                    "phone", coach.getUser().getPhone() != null ? coach.getUser().getPhone() : "",
+                    "profilePicture", coach.getUser().getProfilePicture() != null ?
+                            Base64.getEncoder().encodeToString(coach.getUser().getProfilePicture()) : "",
+                    "description", coach.getDescription() != null ? coach.getDescription() : ""
+            );
+
+            users.add(user);
+        }
+
+        return users;
+    }
+
+    public void saveCoach(Long coachId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        Coach coach = coachRepository.findById(coachId)
+                .orElseThrow(() -> new RuntimeException("Coach with id " + coachId + " not found"));
+
+        customer.setCoach(coach);
+        customerRepository.save(customer);
+    }
+
+    public Map<String,?> getCoach() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        if(customer.getCoach() == null) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, String> user = Map.of(
+                "id", String.valueOf(customer.getCoach().getId()),
+                "firstName", customer.getCoach().getUser().getFirstName(),
+                "lastName", customer.getCoach().getUser().getLastName(),
+                "qualification", customer.getCoach().getQualification(),
+                "email", customer.getCoach().getUser().getEmail(),
+                "phone", customer.getCoach().getUser().getPhone() != null ? customer.getCoach().getUser().getPhone() : "",
+                "profilePicture", customer.getCoach().getUser().getProfilePicture() != null ?
+                        Base64.getEncoder().encodeToString(customer.getCoach().getUser().getProfilePicture()) : "",
+                "description", customer.getCoach().getDescription() != null ? customer.getCoach().getDescription() : ""
+        );
+
+        return user;
+    }
+
+    public void removeCoach() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        customer.setCoach(null);
+        customerRepository.save(customer);
+    }
+
+    public Map<String, ?> getProfile(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User " + username + " not found"));
+
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        Map<String, String> profile = Map.of(
+                "id", String.valueOf(user.getId()),
+                "firstName", user.getFirstName(),
+                "lastName", user.getLastName(),
+                "email", user.getEmail(),
+                "phone", user.getPhone() != null ? user.getPhone() : "",
+                "profilePicture", user.getProfilePicture() != null ?
+                        Base64.getEncoder().encodeToString(user.getProfilePicture()) : "",
+                "targetWeight", customer.getTargetWeight() != null ?
+                        String.valueOf(customer.getTargetWeight()) : "",
+                "targetWorkout", customer.getTargetWorkout() != null ?
+                        String.valueOf(customer.getTargetWorkout()) : "",
+                "targetCalories", customer.getTargetCalories() != null ?
+                        String.valueOf(customer.getTargetCalories()) : ""
+        );
+
+        return profile;
+    }
+
+    public void createEvent(EventRequest event) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        Event newEvent = Event.builder()
+                .title(event.getTitle())
+                .details(event.getDetails())
+                .link(event.getLink())
+                .isCancelled(false)
+                .date(event.getDate())
+                .build();
+
+        newEvent.setCustomer(customer);
+        customer.getEvents().add(newEvent);
+
+        customerRepository.save(customer);
+    }
+
+
+    public List<?> getEvents() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        if(customer.getEvents() == null) {
+            return Collections.emptyList();
+        }
+
+        List<Event> events = customer.getEvents();
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (Event event : events) {
+            Map<String, String> eventMap = Map.of(
+                    "id", String.valueOf(event.getId()),
+                    "title", event.getTitle(),
+                    "details", event.getDetails(),
+                    "link", event.getLink() != null ? event.getLink() : "",
+                    "date", event.getDate().toString(),
+                    "isCancelled", String.valueOf(event.getIsCancelled())
+
+            );
+
+            response.add(eventMap);
+        }
+
+        return response;
+    }
+
+    public void updateEvent(Long eventId, EventRequest event) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        Event updatedEvent = customer.getEvents().stream()
+                .filter(e -> e.getId().equals(eventId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " not found"));
+
+        updatedEvent.setTitle(event.getTitle());
+        updatedEvent.setDetails(event.getDetails());
+        updatedEvent.setLink(event.getLink());
+        updatedEvent.setIsCancelled(event.getIsCancelled());
+
+        customerRepository.save(customer);
     }
 }

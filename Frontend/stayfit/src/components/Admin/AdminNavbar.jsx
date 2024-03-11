@@ -1,11 +1,5 @@
 import { React, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import QrCodeIcon from "@mui/icons-material/QrCode";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "../Auth/AuthProvider";
 import Dialog from "@mui/material/Dialog";
