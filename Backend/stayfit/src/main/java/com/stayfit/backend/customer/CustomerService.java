@@ -6,8 +6,11 @@ import com.stayfit.backend.coach.Coach;
 import com.stayfit.backend.coach.CoachRepository;
 import com.stayfit.backend.customer.request.BillingInfoRequest;
 import com.stayfit.backend.customer.request.EventRequest;
+import com.stayfit.backend.customer.request.RecordRequest;
 import com.stayfit.backend.event.Event;
 import com.stayfit.backend.exception.UserNotFoundException;
+import com.stayfit.backend.record.Record;
+import com.stayfit.backend.record.RecordRepository;
 import com.stayfit.backend.user.User;
 import com.stayfit.backend.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +33,7 @@ public class CustomerService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final CoachRepository coachRepository;
+    private final RecordRepository recordRepository;
 
     public BillingInfoRequest getBillingInfo() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -261,5 +265,61 @@ public class CustomerService {
         updatedEvent.setIsCancelled(event.getIsCancelled());
 
         customerRepository.save(customer);
+    }
+
+    public void createRecord(RecordRequest record) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        if(recordRepository.existsByDate(record.getDate())) {
+            Record existingRecord = recordRepository.findByDate(record.getDate())
+                    .orElseThrow(() -> new RuntimeException("Record with date " + record.getDate() + " not found"));
+
+            existingRecord.setWeight(record.getWeight());
+            existingRecord.setCalories(record.getCalories());
+            existingRecord.setWorkout(record.getWorkout());
+
+            recordRepository.save(existingRecord);
+        } else {
+            Record newRecord = Record.builder()
+                    .date(record.getDate())
+                    .weight(record.getWeight())
+                    .calories(record.getCalories())
+                    .workout(record.getWorkout())
+                    .build();
+
+            newRecord.setCustomer(customer);
+            customer.getRecords().add(newRecord);
+        }
+
+        customerRepository.save(customer);
+    }
+
+    public List<?> getRecords() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        if(customer.getRecords() == null) {
+            return Collections.emptyList();
+        }
+
+        List<Record> records = customer.getRecords();
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (Record record : records) {
+            Map<String, String> recordMap = Map.of(
+                    "id", String.valueOf(record.getId()),
+                    "date", record.getDate().toString(),
+                    "weight", record.getWeight().toString(),
+                    "calories", record.getCalories().toString(),
+                    "workout", record.getWorkout().toString()
+            );
+
+            response.add(recordMap);
+        }
+
+        return response;
     }
 }

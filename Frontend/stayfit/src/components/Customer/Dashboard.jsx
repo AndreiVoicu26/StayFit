@@ -179,7 +179,7 @@ function Dashboard() {
                     <hr className="m-0" />
                     <h4 className="mb-1 mt-1">Today's Goals</h4>
                     <hr className="m-0" />
-                    <div className="d-flex justify-content-between mt-3">
+                    <div className="mt-3">
                       <TextField
                         label="Minutes of Workout"
                         variant="outlined"
@@ -188,10 +188,14 @@ function Dashboard() {
                           profile.targetWorkout ? profile.targetWorkout : 0
                         }
                         disabled
+                        sx={{
+                          "& .MuiInputBase-input.Mui-disabled": {
+                            WebkitTextFillColor: "black",
+                          },
+                        }}
                       />
-                      <Checkbox style={{ color: "#1c2938" }} disabled />
                     </div>
-                    <div className="d-flex justify-content-between mt-2">
+                    <div className="mt-3">
                       <TextField
                         label="Calories Consumed"
                         variant="outlined"
@@ -200,8 +204,12 @@ function Dashboard() {
                           profile.targetCalories ? profile.targetCalories : 0
                         }
                         disabled
+                        sx={{
+                          "& .MuiInputBase-input.Mui-disabled": {
+                            WebkitTextFillColor: "black",
+                          },
+                        }}
                       />
-                      <Checkbox style={{ color: "#1c2938" }} disabled />
                     </div>
                   </div>
                 </div>

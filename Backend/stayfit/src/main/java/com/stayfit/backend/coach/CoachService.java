@@ -1,10 +1,12 @@
 package com.stayfit.backend.coach;
 
 import com.stayfit.backend.coach.request.CoachInfoRequest;
+import com.stayfit.backend.coach.request.TargetRequest;
 import com.stayfit.backend.customer.Customer;
 import com.stayfit.backend.customer.CustomerRepository;
 import com.stayfit.backend.customer.request.EventRequest;
 import com.stayfit.backend.event.Event;
+import com.stayfit.backend.record.Record;
 import com.stayfit.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -84,7 +86,13 @@ public class CoachService {
                 "phone", customer.getUser().getPhone() != null ? customer.getUser().getPhone() : "",
                 "dateOfBirth", customer.getUser().getDateOfBirth() != null ? customer.getUser().getDateOfBirth().toString() : "",
                 "profilePicture", customer.getUser().getProfilePicture() != null ?
-                        Base64.getEncoder().encodeToString(customer.getUser().getProfilePicture()) : ""
+                        Base64.getEncoder().encodeToString(customer.getUser().getProfilePicture()) : "",
+                "targetWeight", customer.getTargetWeight() != null ?
+                        String.valueOf(customer.getTargetWeight()) : "",
+                "targetWorkout", customer.getTargetWorkout() != null ?
+                        String.valueOf(customer.getTargetWorkout()) : "",
+                "targetCalories", customer.getTargetCalories() != null ?
+                        String.valueOf(customer.getTargetCalories()) : ""
         );
 
         return user;
@@ -153,5 +161,44 @@ public class CoachService {
         updatedEvent.setIsCancelled(event.getIsCancelled());
 
         customerRepository.save(customer);
+    }
+
+    public void updateTarget(Long id, TargetRequest target) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        customer.setTargetWeight(target.getWeight());
+        customer.setTargetWorkout(target.getWorkout());
+        customer.setTargetCalories(target.getCalories());
+
+        customerRepository.save(customer);
+    }
+
+    public List<?> getRecords(Long id) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        if(customer.getRecords() == null) {
+            return Collections.emptyList();
+        }
+
+        List<Record> records = customer.getRecords();
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (Record record : records) {
+            Map<String, String> recordMap = Map.of(
+                    "id", String.valueOf(record.getId()),
+                    "date", record.getDate().toString(),
+                    "weight", record.getWeight().toString(),
+                    "calories", record.getCalories().toString(),
+                    "workout", record.getWorkout().toString()
+            );
+
+            response.add(recordMap);
+        }
+
+        return response;
     }
 }

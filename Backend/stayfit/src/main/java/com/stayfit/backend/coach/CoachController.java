@@ -1,6 +1,7 @@
 package com.stayfit.backend.coach;
 
 import com.stayfit.backend.coach.request.CoachInfoRequest;
+import com.stayfit.backend.coach.request.TargetRequest;
 import com.stayfit.backend.customer.request.EventRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +64,19 @@ public class CoachController {
         coachService.updateEvent(id, eventId, event);
 
         return ResponseEntity.ok("Event updated successfully");
+    }
+
+    @PutMapping("/client/{id}/target")
+    public ResponseEntity<?> updateTarget(@PathVariable Long id, @RequestBody TargetRequest target) {
+        coachService.updateTarget(id, target);
+
+        return ResponseEntity.ok("Target updated successfully");
+    }
+
+    @GetMapping("/client/{id}/records")
+    public ResponseEntity<?> getRecords(@PathVariable Long id) {
+        List<?> response = coachService.getRecords(id);
+
+        return ResponseEntity.ok(response);
     }
 }

@@ -4,6 +4,7 @@ import com.stayfit.backend.auth.request.PaymentRequest;
 import com.stayfit.backend.coach.Coach;
 import com.stayfit.backend.customer.request.BillingInfoRequest;
 import com.stayfit.backend.customer.request.EventRequest;
+import com.stayfit.backend.customer.request.RecordRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -118,4 +119,19 @@ public class CustomerController {
 
         return ResponseEntity.ok("Event updated successfully");
     }
+
+    @PostMapping("/record")
+    public ResponseEntity<?> addRecord(@RequestBody RecordRequest record) {
+        customerService.createRecord(record);
+
+        return ResponseEntity.ok("Record added successfully");
+    }
+
+    @GetMapping("/records")
+    public ResponseEntity<?> getRecords() {
+        List<?> response = customerService.getRecords();
+
+        return ResponseEntity.ok(response);
+    }
+
 }
