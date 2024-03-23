@@ -3,6 +3,9 @@ package com.stayfit.backend.coach;
 import com.stayfit.backend.coach.request.CoachInfoRequest;
 import com.stayfit.backend.coach.request.TargetRequest;
 import com.stayfit.backend.customer.request.EventRequest;
+import com.stayfit.backend.customer.request.ExerciseRequest;
+import com.stayfit.backend.customer.request.MealRequest;
+import com.stayfit.backend.customer.request.WorkoutRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,4 +82,82 @@ public class CoachController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/client/{id}/workout")
+    public ResponseEntity<?> addWorkout(@PathVariable Long id, @RequestBody WorkoutRequest workout) {
+        coachService.createWorkout(id, workout);
+
+        return ResponseEntity.ok("Workout added successfully");
+    }
+
+    @GetMapping("/client/{id}/workouts/{day}")
+    public ResponseEntity<?> getWorkouts(@PathVariable Long id, @PathVariable String day) {
+        List<?> response = coachService.getWorkouts(id, day);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/client/{id}/workout/{workoutId}")
+    public ResponseEntity<?> updateWorkout(@PathVariable Long id, @PathVariable Long workoutId, @RequestBody WorkoutRequest workout) {
+        coachService.updateWorkout(id, workoutId, workout);
+
+        return ResponseEntity.ok("Workout updated successfully");
+    }
+
+    @DeleteMapping("/client/{id}/workout/{workoutId}")
+    public ResponseEntity<?> deleteWorkout(@PathVariable Long id, @PathVariable Long workoutId) {
+        coachService.deleteWorkout(id, workoutId);
+
+        return ResponseEntity.ok("Workout deleted successfully");
+    }
+
+    @PostMapping("/client/{id}/workout/{workoutId}/exercise")
+    public ResponseEntity<?> addExercise(@PathVariable Long id, @PathVariable Long workoutId, @RequestBody ExerciseRequest exercise) {
+        coachService.addExercise(id, workoutId, exercise);
+
+        return ResponseEntity.ok("Exercise added successfully");
+    }
+
+    @PutMapping("/client/{id}/workout/{workoutId}/exercise/{exerciseId}")
+    public ResponseEntity<?> updateExercise(@PathVariable Long id, @PathVariable Long workoutId, @PathVariable Long exerciseId, @RequestBody ExerciseRequest exercise) {
+        coachService.updateExercise(id, workoutId, exerciseId, exercise);
+
+        return ResponseEntity.ok("Exercise updated successfully");
+    }
+
+    @DeleteMapping("/client/{id}/workout/{workoutId}/exercise/{exerciseId}")
+    public ResponseEntity<?> deleteExercise(@PathVariable Long id, @PathVariable Long workoutId, @PathVariable Long exerciseId) {
+        coachService.deleteExercise(id, workoutId, exerciseId);
+
+        return ResponseEntity.ok("Exercise deleted successfully");
+    }
+
+    @PostMapping("/client/{id}/meal")
+    public ResponseEntity<?> addMeal(@PathVariable Long id, @RequestBody MealRequest meal) {
+        coachService.createMeal(id, meal);
+
+        return ResponseEntity.ok("Meal added successfully");
+    }
+
+    @GetMapping("/client/{id}/meals/{day}")
+    public ResponseEntity<?> getMeals(@PathVariable Long id, @PathVariable String day) {
+        List<?> response = coachService.getMeals(id, day);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/client/{id}/meal/{mealId}")
+    public ResponseEntity<?> updateMeal(@PathVariable Long id, @PathVariable Long mealId, @RequestBody MealRequest meal) {
+        coachService.updateMeal(id, mealId, meal);
+
+        return ResponseEntity.ok("Meal updated successfully");
+    }
+
+    @DeleteMapping("/client/{id}/meal/{mealId}")
+    public ResponseEntity<?> deleteMeal(@PathVariable Long id, @PathVariable Long mealId) {
+        coachService.deleteMeal(id, mealId);
+
+        return ResponseEntity.ok("Meal deleted successfully");
+    }
+
 }

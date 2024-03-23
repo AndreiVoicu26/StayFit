@@ -17,6 +17,7 @@
     "react": "^18.2.0",
     "react-calendar": "^4.6.1",
     "react-chartjs-2": "^5.2.0",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
     "react-qr-code": "^2.0.12",

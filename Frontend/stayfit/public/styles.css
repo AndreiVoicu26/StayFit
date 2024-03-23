@@ -2252,19 +2252,6 @@ p {
 }
 #workout-nutrition .day.active {
   background-color: #ff9c91;
-  &::after {
-    position: absolute;
-    top: 50%;
-    bottom: 10px;
-    right: -9px;
-    width: 0;
-    height: 0;
-    margin-top: -10px;
-    content: "";
-    border-style: solid;
-    border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent #ff9c91;
-  }
 }
 #workout-nutrition i {
   cursor: pointer;

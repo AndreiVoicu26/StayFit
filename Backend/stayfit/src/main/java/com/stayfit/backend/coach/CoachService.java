@@ -5,15 +5,22 @@ import com.stayfit.backend.coach.request.TargetRequest;
 import com.stayfit.backend.customer.Customer;
 import com.stayfit.backend.customer.CustomerRepository;
 import com.stayfit.backend.customer.request.EventRequest;
+import com.stayfit.backend.customer.request.ExerciseRequest;
+import com.stayfit.backend.customer.request.MealRequest;
+import com.stayfit.backend.customer.request.WorkoutRequest;
 import com.stayfit.backend.event.Event;
+import com.stayfit.backend.nutrition.Meal;
 import com.stayfit.backend.record.Record;
 import com.stayfit.backend.user.UserRepository;
+import com.stayfit.backend.workout.Exercise;
+import com.stayfit.backend.workout.Workout;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -200,5 +207,229 @@ public class CoachService {
         }
 
         return response;
+    }
+
+    public void createWorkout(Long id, WorkoutRequest workout) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Workout newWorkout = Workout.builder()
+                .dayOfWeek(workout.getDayOfWeek())
+                .name(workout.getName())
+                .exercises(new ArrayList<>(Collections.emptyList()))
+                .build();
+
+        newWorkout.setCustomer(customer);
+        customer.getWorkouts().add(newWorkout);
+
+        customerRepository.save(customer);
+    }
+
+    public List<?> getWorkouts(Long id, String day) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        if(customer.getWorkouts() == null) {
+            return Collections.emptyList();
+        }
+
+        List<Workout> workouts = customer.getWorkouts();
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Workout workout : workouts) {
+            if(workout.getDayOfWeek().toString().equalsIgnoreCase(day)) {
+                List<Map<String, String>> exercisesList = workout.getExercises().stream().map(exercise -> Map.of(
+                        "id", exercise.getId().toString(),
+                        "name", exercise.getName(),
+                        "details", exercise.getDetails() != null ? exercise.getDetails() : "",
+                        "link", exercise.getLink() != null ? exercise.getLink() : ""
+                )).collect(Collectors.toList());
+
+                Map<String, Object> workoutMap = new HashMap<>();
+                workoutMap.put("id", workout.getId().toString());
+                workoutMap.put("dayOfWeek", workout.getDayOfWeek().toString());
+                workoutMap.put("name", workout.getName());
+                workoutMap.put("exercises", exercisesList);
+
+                response.add(workoutMap);
+            }
+        }
+
+        return response;
+    }
+
+    public void updateWorkout(Long id, Long workoutId, WorkoutRequest workout) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Workout updatedWorkout = customer.getWorkouts().stream()
+                .filter(w -> w.getId().equals(workoutId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+
+        updatedWorkout.setName(workout.getName());
+
+        customerRepository.save(customer);
+    }
+
+
+    public void deleteWorkout(Long id, Long workoutId) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Workout workout = customer.getWorkouts().stream()
+                .filter(w -> w.getId().equals(workoutId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+
+        customer.getWorkouts().remove(workout);
+
+        customerRepository.save(customer);
+    }
+
+    public void addExercise(Long id, Long workoutId, ExerciseRequest exercise) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Workout workout = customer.getWorkouts().stream()
+                .filter(w -> w.getId().equals(workoutId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+
+        Exercise newExercise = com.stayfit.backend.workout.Exercise.builder()
+                .name(exercise.getName())
+                .details(exercise.getDetails())
+                .link(exercise.getLink())
+                .build();
+
+        newExercise.setWorkout(workout);
+        workout.getExercises().add(newExercise);
+
+        customerRepository.save(customer);
+    }
+
+
+    public void updateExercise(Long id, Long workoutId, Long exerciseId, ExerciseRequest exercise) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Workout workout = customer.getWorkouts().stream()
+                .filter(w -> w.getId().equals(workoutId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+
+        Exercise updatedExercise = workout.getExercises().stream()
+                .filter(e -> e.getId().equals(exerciseId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Exercise with id " + exerciseId + " not found"));
+
+        updatedExercise.setName(exercise.getName());
+        updatedExercise.setDetails(exercise.getDetails());
+        updatedExercise.setLink(exercise.getLink());
+
+        customerRepository.save(customer);
+    }
+
+    public void deleteExercise(Long id, Long workoutId, Long exerciseId) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Workout workout = customer.getWorkouts().stream()
+                .filter(w -> w.getId().equals(workoutId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+
+        Exercise exercise = workout.getExercises().stream()
+                .filter(e -> e.getId().equals(exerciseId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Exercise with id " + exerciseId + " not found"));
+
+        workout.getExercises().remove(exercise);
+
+        customerRepository.save(customer);
+    }
+
+    public void createMeal(Long id, MealRequest meal) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Meal newMeal = Meal.builder()
+                .dayOfWeek(meal.getDayOfWeek())
+                .mealType(meal.getMealType())
+                .name(meal.getName())
+                .details(meal.getDetails())
+                .build();
+
+        newMeal.setCustomer(customer);
+        customer.getMeals().add(newMeal);
+
+        customerRepository.save(customer);
+    }
+
+    public List<?> getMeals(Long id, String day) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        if(customer.getMeals() == null) {
+            return Collections.emptyList();
+        }
+
+        List<Meal> meals = customer.getMeals();
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (Meal meal : meals) {
+            if(meal.getDayOfWeek().toString().equalsIgnoreCase(day)) {
+                Map<String, String> mealMap = Map.of(
+                        "id", meal.getId().toString(),
+                        "mealType", meal.getMealType().toString(),
+                        "name", meal.getName(),
+                        "details", meal.getDetails() != null ? meal.getDetails() : ""
+                );
+
+                response.add(mealMap);
+            }
+        }
+
+        return response;
+    }
+
+    public void updateMeal(Long id, Long mealId, MealRequest meal) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Meal updatedMeal = customer.getMeals().stream()
+                .filter(m -> m.getId().equals(mealId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Meal with id " + mealId + " not found"));
+
+        updatedMeal.setName(meal.getName());
+        updatedMeal.setDetails(meal.getDetails());
+
+        customerRepository.save(customer);
+    }
+
+    public void deleteMeal(Long id, Long mealId) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Meal meal = customer.getMeals().stream()
+                .filter(m -> m.getId().equals(mealId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Meal with id " + mealId + " not found"));
+
+        customer.getMeals().remove(meal);
+
+        customerRepository.save(customer);
     }
 }

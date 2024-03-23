@@ -2,9 +2,7 @@ package com.stayfit.backend.customer;
 
 import com.stayfit.backend.auth.request.PaymentRequest;
 import com.stayfit.backend.coach.Coach;
-import com.stayfit.backend.customer.request.BillingInfoRequest;
-import com.stayfit.backend.customer.request.EventRequest;
-import com.stayfit.backend.customer.request.RecordRequest;
+import com.stayfit.backend.customer.request.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Map;
 
@@ -130,6 +129,20 @@ public class CustomerController {
     @GetMapping("/records")
     public ResponseEntity<?> getRecords() {
         List<?> response = customerService.getRecords();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/workouts/{day}")
+    public ResponseEntity<?> getWorkouts(@PathVariable String day) {
+        List<?> response = customerService.getWorkouts(day);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/meals/{day}")
+    public ResponseEntity<?> getMeals(@PathVariable String day) {
+        List<?> response = customerService.getMeals(day);
 
         return ResponseEntity.ok(response);
     }

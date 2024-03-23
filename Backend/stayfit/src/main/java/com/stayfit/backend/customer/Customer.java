@@ -2,10 +2,10 @@ package com.stayfit.backend.customer;
 
 import com.stayfit.backend.coach.Coach;
 import com.stayfit.backend.event.Event;
-import com.stayfit.backend.nutrition.NutritionalPlan;
+import com.stayfit.backend.nutrition.Meal;
 import com.stayfit.backend.record.Record;
 import com.stayfit.backend.user.User;
-import com.stayfit.backend.workout.WorkoutPlan;
+import com.stayfit.backend.workout.Workout;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import lombok.AllArgsConstructor;
@@ -57,8 +57,8 @@ public class Customer {
     private Integer targetCalories;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkoutPlan> workoutPlans;
+    private List<Workout> workouts;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NutritionalPlan> nutritionalPlans;
+    private List<Meal> meals;
 }

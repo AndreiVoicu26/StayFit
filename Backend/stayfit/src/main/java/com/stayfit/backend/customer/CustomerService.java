@@ -4,15 +4,16 @@ import com.stayfit.backend.auth.request.PaymentRequest;
 import com.stayfit.backend.auth.util.CookieUtil;
 import com.stayfit.backend.coach.Coach;
 import com.stayfit.backend.coach.CoachRepository;
-import com.stayfit.backend.customer.request.BillingInfoRequest;
-import com.stayfit.backend.customer.request.EventRequest;
-import com.stayfit.backend.customer.request.RecordRequest;
+import com.stayfit.backend.customer.request.*;
 import com.stayfit.backend.event.Event;
 import com.stayfit.backend.exception.UserNotFoundException;
+import com.stayfit.backend.nutrition.Meal;
 import com.stayfit.backend.record.Record;
 import com.stayfit.backend.record.RecordRepository;
 import com.stayfit.backend.user.User;
 import com.stayfit.backend.user.UserRepository;
+import com.stayfit.backend.workout.Exercise;
+import com.stayfit.backend.workout.Workout;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -318,6 +320,60 @@ public class CustomerService {
             );
 
             response.add(recordMap);
+        }
+
+        return response;
+    }
+
+    public List<Map<String, Object>> getWorkouts(String day) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        List<Workout> workouts = customer.getWorkouts();
+        List<Map<String, Object>> response = new ArrayList<>();
+
+        for (Workout workout : workouts) {
+            if(workout.getDayOfWeek().toString().equalsIgnoreCase(day)) {
+                List<Map<String, String>> exercisesList = workout.getExercises().stream().map(exercise -> Map.of(
+                        "id", exercise.getId().toString(),
+                        "name", exercise.getName(),
+                        "details", exercise.getDetails() != null ? exercise.getDetails() : "",
+                        "link", exercise.getLink() != null ? exercise.getLink() : ""
+                )).collect(Collectors.toList());
+
+                Map<String, Object> workoutMap = new HashMap<>();
+                workoutMap.put("id", workout.getId().toString());
+                workoutMap.put("dayOfWeek", workout.getDayOfWeek().toString());
+                workoutMap.put("name", workout.getName());
+                workoutMap.put("exercises", exercisesList);
+
+                response.add(workoutMap);
+            }
+        }
+
+        return response;
+    }
+
+    public List<?> getMeals(String day) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        List<Meal> meals = customer.getMeals();
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (Meal meal : meals) {
+            if(meal.getDayOfWeek().toString().equalsIgnoreCase(day)) {
+                Map<String, String> mealMap = Map.of(
+                        "id", meal.getId().toString(),
+                        "mealType", meal.getMealType().toString(),
+                        "name", meal.getName(),
+                        "details", meal.getDetails() != null ? meal.getDetails() : ""
+                );
+
+                response.add(mealMap);
+            }
         }
 
         return response;
