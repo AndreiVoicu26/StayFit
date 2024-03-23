@@ -173,6 +173,12 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
 
         customer.setCoach(null);
+        customer.getWorkouts().clear();
+        customer.getEvents().clear();
+        customer.getMeals().clear();
+        customer.setTargetWeight(null);
+        customer.setTargetWorkout(null);
+        customer.setTargetCalories(null);
         customerRepository.save(customer);
     }
 

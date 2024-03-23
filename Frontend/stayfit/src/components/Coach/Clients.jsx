@@ -89,7 +89,13 @@ function Clients() {
             ) : (
               <>
                 <ResponsiveMasonry
-                  columnsCountBreakPoints={{ 400: 2, 800: 3, 1000: 4, 1200: 5 }}
+                  columnsCountBreakPoints={{
+                    400: 1,
+                    600: 2,
+                    800: 3,
+                    1000: 4,
+                    1200: 5,
+                  }}
                 >
                   <Masonry>
                     {clients.map((client) => (

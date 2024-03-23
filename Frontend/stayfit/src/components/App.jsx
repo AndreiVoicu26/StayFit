@@ -13,7 +13,7 @@ import Tracker from "./Customer/Tracker";
 import Coaches from "./Customer/Coaches";
 import WorkoutSchedule from "./Customer/WorkoutSchedule";
 import NutritionPlan from "./Customer/NutritionPlan";
-import GymAccess from "./Customer/GymAccess";
+import GymAccess from "./Customer/GymAccess/GymAccess";
 import Clients from "./Coach/Clients";
 import CoachProfile from "./Coach/CoachProfile";
 import ClientDashboard from "./Coach/ClientDashboard";
