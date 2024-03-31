@@ -56,7 +56,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (credentials) => {
+  const register = async (credentials, rememberMe) => {
     setLoading(true);
     try {
       const response = await axios.post(
@@ -65,6 +65,10 @@ const AuthProvider = ({ children }) => {
         { withCredentials: true }
       );
       if (response.status === 200) {
+        if (rememberMe) {
+          localStorage.setItem("username", credentials.username);
+          localStorage.setItem("password", credentials.password);
+        }
         navigate("/payment");
         console.log("Registration successful!");
       }
@@ -99,7 +103,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (credentials) => {
+  const login = async (credentials, rememberMe) => {
     setLoading(true);
     try {
       const response = await axios.post(
@@ -110,6 +114,10 @@ const AuthProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
+        if (rememberMe) {
+          localStorage.setItem("username", credentials.username);
+          localStorage.setItem("password", credentials.password);
+        }
         setAuthenticated(true);
         setRole(response.data.role);
         if (response.data.role === "CUSTOMER") {

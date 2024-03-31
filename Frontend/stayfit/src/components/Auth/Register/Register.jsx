@@ -18,6 +18,7 @@ function Register() {
   });
   const [formErrors, setFormErrors] = useState({});
   const [visible, setVisible] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const { authenticated, register, checkAuth } = useAuth();
 
   useEffect(() => {
@@ -29,7 +30,7 @@ function Register() {
 
     validate(formData, setFormErrors, setIsFormValid);
     if (validate(formData, setFormErrors, setIsFormValid) && isFormValid) {
-      register(formData);
+      register(formData, rememberMe);
     }
   };
 
@@ -204,7 +205,20 @@ function Register() {
                 </form>
                 <div className="mb-3 d-flex">
                   <div className="w-50 form-check mb-0 ms-2">
-                    <input class="form-check-input" type="checkbox" />
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      onChange={() => {
+                        setRememberMe(!rememberMe);
+                        if (!rememberMe) {
+                          localStorage.setItem("rememberMe", true);
+                        } else {
+                          localStorage.removeItem("rememberMe");
+                          localStorage.removeItem("username");
+                          localStorage.removeItem("password");
+                        }
+                      }}
+                    />
                     <h6 class="form-check-label mb-0">Remember Me</h6>
                   </div>
                 </div>

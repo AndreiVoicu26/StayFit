@@ -17,10 +17,19 @@ function Login() {
   const [authUnsuccessful, setAuthUnsuccessful] = useState(false);
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const { authenticated, login, checkAuth } = useAuth();
 
   useEffect(() => {
     checkAuth();
+
+    if (localStorage.getItem("rememberMe")) {
+      setRememberMe(true);
+      setFormData({
+        username: localStorage.getItem("username"),
+        password: localStorage.getItem("password"),
+      });
+    }
   }, []);
 
   const handleLogin = (e) => {
@@ -28,7 +37,7 @@ function Login() {
 
     validate(formData, setFormErrors);
     if (validate(formData, setFormErrors)) {
-      login(formData).catch(() => {
+      login(formData, rememberMe).catch(() => {
         setAuthUnsuccessful(true);
         let errors = {};
         errors.username = "Username or password incorrect";
@@ -143,7 +152,22 @@ function Login() {
                 </form>
                 <div className="mb-3 d-flex">
                   <div className="w-50 form-check mb-0 ms-2">
-                    <input class="form-check-input" type="checkbox" />
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={() => {
+                        setRememberMe(!rememberMe);
+                        if (!rememberMe) {
+                          localStorage.setItem("rememberMe", true);
+                        } else {
+                          localStorage.removeItem("rememberMe");
+                          localStorage.removeItem("username");
+                          localStorage.removeItem("password");
+                        }
+                      }}
+                    />
+
                     <h6 class="form-check-label mb-0">Remember Me</h6>
                   </div>
                   <div className="w-50 text-end mb-0 me-2">
