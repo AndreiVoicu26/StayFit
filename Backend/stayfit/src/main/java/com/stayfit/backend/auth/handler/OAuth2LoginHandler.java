@@ -50,11 +50,16 @@ public class OAuth2LoginHandler extends SavedRequestAwareAuthenticationSuccessHa
             throw new RuntimeException("Unsupported OAuth2 user");
         }
 
-        User user;
+        User user = null;
 
-        if (userRepository.existsByUsername(username)) {
-            user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+        if (userRepository.existsByUsername(username) || userRepository.existsByEmail(email)) {
+            if(userRepository.existsByUsername(username)) {
+                user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+            } else if(userRepository.existsByEmail(email)) {
+                user = userRepository.findByEmail(email)
+                        .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+            }
 
             var customer = customerRepository.findByUser(user)
                     .orElseThrow(() -> new RuntimeException("Customer " + username + " not found"));
@@ -82,10 +87,6 @@ public class OAuth2LoginHandler extends SavedRequestAwareAuthenticationSuccessHa
                     .email(email)
                     .role(Role.CUSTOMER)
                     .build();
-
-            if (userRepository.existsByEmail(user.getEmail())) {
-                throw new UserAlreadyExistsException("A user with email " + user.getEmail() + " already exists");
-            }
 
             userRepository.save(user);
 
