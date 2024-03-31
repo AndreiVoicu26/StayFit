@@ -21,15 +21,16 @@ public class Record {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @NotNull
+    @Column(name = "weight", nullable = false)
     private Double weight;
 
-    @NotNull
+    @Column(name = "calories", nullable = false)
     private Integer calories;
 
+    @Column(name = "workout", nullable = false)
     private Integer workout;
 
     @ManyToOne

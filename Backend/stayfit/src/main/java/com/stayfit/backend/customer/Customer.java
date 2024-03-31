@@ -31,30 +31,36 @@ public class Customer {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "coach_id")
-    private Coach coach;
-
     @Enumerated(EnumType.STRING)
+    @Column(name = "membership_type")
     private MembershipType membershipType;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private Status status;
 
     @FutureOrPresent
+    @Column(name = "next_billing_date")
     private LocalDate nextBillingDate;
+
+    @Column(name = "target_weight")
+    private Double targetWeight;
+
+    @Column(name = "target_workout")
+    private Integer targetWorkout;
+
+    @Column(name = "target_calories")
+    private Integer targetCalories;
+
+    @ManyToOne
+    @JoinColumn(name = "coach_id")
+    private Coach coach;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Record> records;
-
-    private Double targetWeight;
-
-    private Integer targetWorkout;
-
-    private Integer targetCalories;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Workout> workouts;

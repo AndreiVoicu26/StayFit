@@ -8,6 +8,7 @@ import com.stayfit.backend.customer.Status;
 import com.stayfit.backend.exception.CoachNotFoundException;
 import com.stayfit.backend.exception.CustomerNotFoundException;
 import com.stayfit.backend.exception.UserAlreadyExistsException;
+import com.stayfit.backend.sysadmin.request.RegisterCoachRequest;
 import com.stayfit.backend.user.Role;
 import com.stayfit.backend.user.User;
 import com.stayfit.backend.user.UserRepository;
@@ -77,7 +78,8 @@ public class SysAdminService {
     }
 
     public void deleteCoach(Long id) {
-        Coach coach = coachRepository.findById(id).orElseThrow(() -> new CoachNotFoundException("Coach with id " + id + " not found"));
+        Coach coach = coachRepository.findById(id)
+                .orElseThrow(() -> new CoachNotFoundException("Coach with id " + id + " not found"));
 
         coachRepository.deleteById(id);
         userRepository.deleteById(coach.getUser().getId());
@@ -104,14 +106,16 @@ public class SysAdminService {
     }
 
     public void deleteCustomer(Long id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         customerRepository.deleteById(id);
         userRepository.deleteById(customer.getUser().getId());
     }
 
     public void deactivateCustomer(Long id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         customer.setStatus(Status.INACTIVE);
         customer.setMembershipType(null);

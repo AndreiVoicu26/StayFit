@@ -23,15 +23,17 @@ public class Meal {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "day_of_week", nullable = false)
     private DayOfWeek dayOfWeek;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "meal_type", nullable = false)
     private MealType mealType;
 
-    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "details")
     private String details;
 
     @ManyToOne

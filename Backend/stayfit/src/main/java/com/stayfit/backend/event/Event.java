@@ -22,16 +22,19 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @NotNull
+    @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "details")
     private String details;
 
+    @Column(name = "link")
     private String link;
 
+    @Column(name = "is_cancelled")
     private Boolean isCancelled;
 
     @ManyToOne

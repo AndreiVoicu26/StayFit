@@ -9,6 +9,7 @@ import com.stayfit.backend.customer.request.ExerciseRequest;
 import com.stayfit.backend.customer.request.MealRequest;
 import com.stayfit.backend.customer.request.WorkoutRequest;
 import com.stayfit.backend.event.Event;
+import com.stayfit.backend.exception.*;
 import com.stayfit.backend.nutrition.Meal;
 import com.stayfit.backend.record.Record;
 import com.stayfit.backend.user.UserRepository;
@@ -26,15 +27,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CoachService {
 
-    private final UserRepository userRepository;
     private final CoachRepository coachRepository;
     private final CustomerRepository customerRepository;
-
 
     public void updateCoachInfo(CoachInfoRequest info) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Coach coach = coachRepository.findByUserUsername(username)
-                .orElseThrow(() -> new RuntimeException("Coach with username " + username + " not found"));
+                .orElseThrow(() -> new CoachNotFoundException("Coach with username " + username + " not found"));
 
         coach.setQualification(info.getQualification());
         coach.setDescription(info.getDescription());
@@ -45,7 +44,7 @@ public class CoachService {
     public CoachInfoRequest getCoachInfo() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Coach coach = coachRepository.findByUserUsername(username)
-                .orElseThrow(() -> new RuntimeException("Coach with username " + username + " not found"));
+                .orElseThrow(() -> new CoachNotFoundException("Coach with username " + username + " not found"));
 
         return CoachInfoRequest.builder()
                 .qualification(coach.getQualification())
@@ -57,7 +56,7 @@ public class CoachService {
     public List<?> getCustomers() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Coach coach = coachRepository.findByUserUsername(username)
-                .orElseThrow(() -> new RuntimeException("Coach with username " + username + " not found"));
+                .orElseThrow(() -> new CoachNotFoundException("Coach with username " + username + " not found"));
 
         if(coach.getCustomers() == null) {
             return Collections.emptyList();
@@ -83,7 +82,7 @@ public class CoachService {
     public Map<String,?> getCustomer(Long id) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Map<String, String> user = Map.of(
                 "id", String.valueOf(customer.getId()),
@@ -108,7 +107,7 @@ public class CoachService {
     public void createEvent(Long id, EventRequest event) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Event newEvent = Event.builder()
                 .title(event.getTitle())
@@ -127,7 +126,7 @@ public class CoachService {
     public List<?> getEvents(Long id) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         if(customer.getEvents() == null) {
             return Collections.emptyList();
@@ -155,12 +154,12 @@ public class CoachService {
     public void updateEvent(Long id, Long eventId, EventRequest event) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Event updatedEvent = customer.getEvents().stream()
                 .filter(e -> e.getId().equals(eventId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " not found"));
+                .orElseThrow(() -> new EventNotFoundException("Event with id " + eventId + " not found"));
 
         updatedEvent.setTitle(event.getTitle());
         updatedEvent.setDetails(event.getDetails());
@@ -173,12 +172,12 @@ public class CoachService {
     public void deleteEvent(Long id, Long eventId) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Event event = customer.getEvents().stream()
                 .filter(e -> e.getId().equals(eventId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " not found"));
+                .orElseThrow(() -> new EventNotFoundException("Event with id " + eventId + " not found"));
 
         customer.getEvents().remove(event);
 
@@ -188,7 +187,7 @@ public class CoachService {
     public void updateTarget(Long id, TargetRequest target) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         customer.setTargetWeight(target.getWeight());
         customer.setTargetWorkout(target.getWorkout());
@@ -200,7 +199,7 @@ public class CoachService {
     public List<?> getRecords(Long id) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         if(customer.getRecords() == null) {
             return Collections.emptyList();
@@ -227,7 +226,7 @@ public class CoachService {
     public void createWorkout(Long id, WorkoutRequest workout) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Workout newWorkout = Workout.builder()
                 .dayOfWeek(workout.getDayOfWeek())
@@ -244,7 +243,7 @@ public class CoachService {
     public List<?> getWorkouts(Long id, String day) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         if(customer.getWorkouts() == null) {
             return Collections.emptyList();
@@ -278,12 +277,12 @@ public class CoachService {
     public void updateWorkout(Long id, Long workoutId, WorkoutRequest workout) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Workout updatedWorkout = customer.getWorkouts().stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+                .orElseThrow(() -> new WorkoutNotFoundException("Workout with id " + workoutId + " not found"));
 
         updatedWorkout.setName(workout.getName());
 
@@ -294,12 +293,12 @@ public class CoachService {
     public void deleteWorkout(Long id, Long workoutId) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Workout workout = customer.getWorkouts().stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+                .orElseThrow(() -> new WorkoutNotFoundException("Workout with id " + workoutId + " not found"));
 
         customer.getWorkouts().remove(workout);
 
@@ -309,12 +308,12 @@ public class CoachService {
     public void addExercise(Long id, Long workoutId, ExerciseRequest exercise) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Workout workout = customer.getWorkouts().stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+                .orElseThrow(() -> new WorkoutNotFoundException("Workout with id " + workoutId + " not found"));
 
         Exercise newExercise = com.stayfit.backend.workout.Exercise.builder()
                 .name(exercise.getName())
@@ -332,17 +331,17 @@ public class CoachService {
     public void updateExercise(Long id, Long workoutId, Long exerciseId, ExerciseRequest exercise) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Workout workout = customer.getWorkouts().stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+                .orElseThrow(() -> new WorkoutNotFoundException("Workout with id " + workoutId + " not found"));
 
         Exercise updatedExercise = workout.getExercises().stream()
                 .filter(e -> e.getId().equals(exerciseId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Exercise with id " + exerciseId + " not found"));
+                .orElseThrow(() -> new ExerciseNotFoundException("Exercise with id " + exerciseId + " not found"));
 
         updatedExercise.setName(exercise.getName());
         updatedExercise.setDetails(exercise.getDetails());
@@ -354,17 +353,17 @@ public class CoachService {
     public void deleteExercise(Long id, Long workoutId, Long exerciseId) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Workout workout = customer.getWorkouts().stream()
                 .filter(w -> w.getId().equals(workoutId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Workout with id " + workoutId + " not found"));
+                .orElseThrow(() -> new WorkoutNotFoundException("Workout with id " + workoutId + " not found"));
 
         Exercise exercise = workout.getExercises().stream()
                 .filter(e -> e.getId().equals(exerciseId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Exercise with id " + exerciseId + " not found"));
+                .orElseThrow(() -> new ExerciseNotFoundException("Exercise with id " + exerciseId + " not found"));
 
         workout.getExercises().remove(exercise);
 
@@ -374,7 +373,7 @@ public class CoachService {
     public void createMeal(Long id, MealRequest meal) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Meal newMeal = Meal.builder()
                 .dayOfWeek(meal.getDayOfWeek())
@@ -392,7 +391,7 @@ public class CoachService {
     public List<?> getMeals(Long id, String day) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         if(customer.getMeals() == null) {
             return Collections.emptyList();
@@ -420,12 +419,12 @@ public class CoachService {
     public void updateMeal(Long id, Long mealId, MealRequest meal) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Meal updatedMeal = customer.getMeals().stream()
                 .filter(m -> m.getId().equals(mealId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Meal with id " + mealId + " not found"));
+                .orElseThrow(() -> new MealNotFoundException("Meal with id " + mealId + " not found"));
 
         updatedMeal.setName(meal.getName());
         updatedMeal.setDetails(meal.getDetails());
@@ -436,12 +435,12 @@ public class CoachService {
     public void deleteMeal(Long id, Long mealId) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)
-                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
         Meal meal = customer.getMeals().stream()
                 .filter(m -> m.getId().equals(mealId))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Meal with id " + mealId + " not found"));
+                .orElseThrow(() -> new MealNotFoundException("Meal with id " + mealId + " not found"));
 
         customer.getMeals().remove(meal);
 

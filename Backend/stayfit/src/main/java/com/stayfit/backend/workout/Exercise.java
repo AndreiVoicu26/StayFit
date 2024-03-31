@@ -19,12 +19,14 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @URL
+    @Column(name = "link")
     private String link;
 
+    @Column(name = "details")
     private String details;
 
     @ManyToOne

@@ -1,4 +1,4 @@
-package com.stayfit.backend.sysadmin;
+package com.stayfit.backend.sysadmin.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -44,8 +44,38 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
-    @ExceptionHandler(AccountAlreadyActive.class)
-    public  ResponseEntity<?> handleAccountAlreadyActive(AccountAlreadyActive ex) {
+    @ExceptionHandler(AccountAlreadyActiveException.class)
+    public  ResponseEntity<?> handleAccountAlreadyActiveException(AccountAlreadyActiveException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EventNotFoundException.class)
+    public ResponseEntity<?> handleEventNotFoundException(EventNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(RecordNotFoundException.class)
+    public ResponseEntity<?> handleRecordNotFoundException(RecordNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(WorkoutNotFoundException.class)
+    public ResponseEntity<?> handleWorkoutNotFoundException(WorkoutNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ExerciseNotFoundException.class)
+    public ResponseEntity<?> handleExerciseNotFoundException(ExerciseNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MealNotFoundException.class)
+    public ResponseEntity<?> handleMealNotFoundException(MealNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidMembershipChangeException.class)
+    public ResponseEntity<?> handleInvalidMembershipChangeException(InvalidMembershipChangeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

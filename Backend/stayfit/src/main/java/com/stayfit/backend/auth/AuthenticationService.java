@@ -111,7 +111,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with username " + username + " not found"));
 
         if (String.valueOf(customer.getStatus()).equals("ACTIVE") && customer.getNextBillingDate().isBefore(LocalDate.now())) {
-            throw new AccountAlreadyActive("Account is already active");
+            throw new AccountAlreadyActiveException("Account is already active");
         }
 
         LocalDate nextBillingDate = LocalDate.now().plusMonths(paymentRequest.getMembershipType().getDurationMonths());
@@ -169,11 +169,11 @@ public class AuthenticationService {
             } else {
                 String username = authentication.getName();
                 User user = userRepository.findByUsername(username)
-                        .orElseThrow(() -> new RuntimeException("User " + username + " not found"));
+                        .orElseThrow(() -> new UserNotFoundException("User " + username + " not found"));
 
                 if(customerRepository.existsByUser(user)) {
                     Customer customer = customerRepository.findByUser(user)
-                            .orElseThrow(() -> new RuntimeException("Customer " + username + " not found"));
+                            .orElseThrow(() -> new CustomerNotFoundException("Customer " + username + " not found"));
 
                     return customer.getStatus();
                 } else {
@@ -280,8 +280,9 @@ public class AuthenticationService {
 
     public void sendEmail(EmailRequest email) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(email.getEmail());
+        message.setFrom("andreivoicu80@gmail.com");
         message.setTo("andreivoicu80@gmail.com");
+        message.setReplyTo(email.getEmail());
         message.setSubject(email.getSubject());
         message.setText("From: " + email.getName() + "\n" + email.getMessage());
 
