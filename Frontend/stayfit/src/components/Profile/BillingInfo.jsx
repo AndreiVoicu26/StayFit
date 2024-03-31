@@ -13,38 +13,19 @@ function BillingInfo() {
     nextBillingDate: Date.now(),
   });
   const [changeMembershipAllowed, setChangeMembershipAllowed] = useState(true);
+  const [allowedDate, setAllowedDate] = useState(null);
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
   const navigate = useNavigate();
 
-  const fetchBillingInfo = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/billing",
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        setBillingInfo(response.data);
-      }
-    } catch (error) {
-      console.log("Error fetching billing info ", error);
-    }
-  };
-
   const handleChangeMembership = async (membershipType) => {
     let date = new Date(billingInfo.nextBillingDate);
+    let dateForMembershipChange = new Date(
+      date.getTime() - 7 * 24 * 60 * 60 * 1000
+    );
 
-    if (
-      new Date(
-        date.getFullYear(),
-        date.getMonth(),
-        date.getDate() - 7,
-        date.getHours(),
-        date.getMinutes(),
-        date.getSeconds(),
-        date.getMilliseconds()
-      ) > Date.now()
-    ) {
+    if (dateForMembershipChange > Date.now()) {
       setChangeMembershipAllowed(false);
+      setAllowedDate(dateForMembershipChange);
       return;
     }
     try {
@@ -78,6 +59,20 @@ function BillingInfo() {
     }
   };
 
+  const fetchBillingInfo = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/customer/billing",
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setBillingInfo(response.data);
+      }
+    } catch (error) {
+      console.log("Error fetching billing info ", error);
+    }
+  };
+
   useEffect(() => {
     fetchBillingInfo();
   }, []);
@@ -103,7 +98,9 @@ function BillingInfo() {
       <div class="row align-items-center ms-md-5">
         <div class="col-xl-6">
           <div class="card plan mt-2">
-            <div class="card-header">Current Plan</div>
+            <div class="card-header">
+              <h5 className="mb-0">Current Plan</h5>
+            </div>
             <div class="card-body">
               <div class="h3">{bill()}</div>
               {(billingInfo.membershipType === "SIX_MONTHS" ||
@@ -140,9 +137,17 @@ function BillingInfo() {
                 </a>
               )}
               {!changeMembershipAllowed && (
-                <Alert severity="error">
-                  You can only change your membership type at least 1 week
-                  before the next billing date
+                <Alert severity="error" className="mt-2">
+                  You can change your membership type starting with{" "}
+                  {new Date(allowedDate).getDate()}{" "}
+                  {new Date(billingInfo.nextBillingDate).toLocaleString(
+                    "en-UK",
+                    {
+                      month: "long",
+                    }
+                  )}
+                  {" / "}
+                  {new Date(billingInfo.nextBillingDate).getFullYear()}
                 </Alert>
               )}
             </div>
@@ -150,11 +155,13 @@ function BillingInfo() {
         </div>
         <div class="col-xl-6">
           <div class="card payment mt-2">
-            <div class="card-header">Next billing date</div>
+            <div class="card-header">
+              <h5 className="mb-0">Next billing date</h5>
+            </div>
             <div class="card-body">
               <div class="h3">
-                {new Date(billingInfo.nextBillingDate).getDay()}{" "}
-                {new Date(billingInfo.nextBillingDate).toLocaleString("en-US", {
+                {new Date(billingInfo.nextBillingDate).getDate()}{" "}
+                {new Date(billingInfo.nextBillingDate).toLocaleString("en-UK", {
                   month: "long",
                 })}
                 {" / "}
@@ -175,12 +182,35 @@ function BillingInfo() {
                   Are you sure you want to cancel your membership?
                 </DialogTitle>
                 <DialogActions>
-                  <Button onClick={() => setOpenStatusDialog(false)}>No</Button>
-                  <Button onClick={() => handleCancelMembership()} autoFocus>
+                  <Button
+                    sx={{ color: "black" }}
+                    onClick={() => setOpenStatusDialog(false)}
+                  >
+                    No
+                  </Button>
+                  <Button
+                    sx={{ color: "black" }}
+                    onClick={() => handleCancelMembership()}
+                    autoFocus
+                  >
                     Yes
                   </Button>
                 </DialogActions>
               </Dialog>
+              {!changeMembershipAllowed && (
+                <Alert severity="info" className="mt-2">
+                  You can change your membership type starting with{" "}
+                  {new Date(allowedDate).getDate()}{" "}
+                  {new Date(billingInfo.nextBillingDate).toLocaleString(
+                    "en-UK",
+                    {
+                      month: "long",
+                    }
+                  )}
+                  {" / "}
+                  {new Date(billingInfo.nextBillingDate).getFullYear()}
+                </Alert>
+              )}
             </div>
           </div>
         </div>

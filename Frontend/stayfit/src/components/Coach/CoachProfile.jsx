@@ -1,8 +1,8 @@
-import { React, useState, useEffect } from "react";
+import { React } from "react";
 import Navbar from "./Navbar";
-import UserInfo from "../Profile/UserInfo";
+import UserInfo from "../Profile/UserInfo/UserInfo";
 import CoachInfo from "../Profile/CoachInfo";
-import ChangeCredentials from "../Profile/CredentialsChange";
+import ChangeCredentials from "../Profile/Security/CredentialsChange";
 
 function CoachProfile() {
   return (

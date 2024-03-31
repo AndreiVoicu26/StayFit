@@ -1,9 +1,6 @@
 package com.stayfit.backend.auth;
 
-import com.stayfit.backend.auth.request.LoginRequest;
-import com.stayfit.backend.auth.request.PasswordResetRequest;
-import com.stayfit.backend.auth.request.PaymentRequest;
-import com.stayfit.backend.auth.request.RegisterRequest;
+import com.stayfit.backend.auth.request.*;
 import com.stayfit.backend.customer.Status;
 import com.stayfit.backend.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -99,5 +96,12 @@ public class AuthenticationController {
         } else {
             return ResponseEntity.badRequest().body("Invalid or expired token.");
         }
+    }
+
+    @PostMapping("/send-email")
+    public ResponseEntity<?> sendEmail(@RequestBody EmailRequest email) {
+        authenticationService.sendEmail(email);
+
+        return ResponseEntity.ok("Email has been sent successfully");
     }
 }

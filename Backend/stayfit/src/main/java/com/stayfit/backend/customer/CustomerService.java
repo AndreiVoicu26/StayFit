@@ -174,7 +174,6 @@ public class CustomerService {
 
         customer.setCoach(null);
         customer.getWorkouts().clear();
-        customer.getEvents().clear();
         customer.getMeals().clear();
         customer.setTargetWeight(null);
         customer.setTargetWorkout(null);
@@ -244,7 +243,7 @@ public class CustomerService {
             Map<String, String> eventMap = Map.of(
                     "id", String.valueOf(event.getId()),
                     "title", event.getTitle(),
-                    "details", event.getDetails(),
+                    "details", event.getDetails() != null ? event.getDetails() : "",
                     "link", event.getLink() != null ? event.getLink() : "",
                     "date", event.getDate().toString(),
                     "isCancelled", String.valueOf(event.getIsCancelled())
@@ -272,6 +271,20 @@ public class CustomerService {
         updatedEvent.setLink(event.getLink());
         updatedEvent.setIsCancelled(event.getIsCancelled());
 
+        customerRepository.save(customer);
+    }
+
+    public void deleteEvent(Long eventId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = customerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Customer with username " + username + " not found"));
+
+        Event event = customer.getEvents().stream()
+                .filter(e -> e.getId().equals(eventId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " not found"));
+
+        customer.getEvents().remove(event);
         customerRepository.save(customer);
     }
 

@@ -14,6 +14,7 @@ import com.stayfit.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -53,6 +54,7 @@ public class SysAdminService {
         coachRepository.save(coach);
     }
 
+    @Transactional
     public List<?> getCoaches() {
          List<Coach> coaches = coachRepository.findAll();
          List<Map<String, String>> users = new ArrayList<>(Collections.emptyList());
@@ -64,7 +66,8 @@ public class SysAdminService {
                      "lastName", coach.getUser().getLastName(),
                      "qualification", coach.getQualification(),
                      "email", coach.getUser().getEmail(),
-                     "phone", coach.getUser().getPhone() != null ? coach.getUser().getPhone() : ""
+                     "phone", coach.getUser().getPhone() != null ? coach.getUser().getPhone() : "",
+                     "hasClients", String.valueOf(!coach.getCustomers().isEmpty())
              );
 
              users.add(user);
@@ -113,6 +116,11 @@ public class SysAdminService {
         customer.setStatus(Status.INACTIVE);
         customer.setMembershipType(null);
         customer.setNextBillingDate(null);
+        customer.setTargetWeight(null);
+        customer.setTargetWorkout(null);
+        customer.setTargetCalories(null);
+        customer.getWorkouts().clear();
+        customer.getMeals().clear();
 
         customerRepository.save(customer);
     }

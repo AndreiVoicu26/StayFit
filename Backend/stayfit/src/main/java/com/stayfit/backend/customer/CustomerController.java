@@ -119,6 +119,13 @@ public class CustomerController {
         return ResponseEntity.ok("Event updated successfully");
     }
 
+    @DeleteMapping("/event/{eventId}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long eventId) {
+        customerService.deleteEvent(eventId);
+
+        return ResponseEntity.ok("Event deleted successfully");
+    }
+
     @PostMapping("/record")
     public ResponseEntity<?> addRecord(@RequestBody RecordRequest record) {
         customerService.createRecord(record);

@@ -44,6 +44,9 @@ function CoachInfo() {
     <div class="row align-items-center ms-md-5">
       <div class="col-xl-12">
         <div class="card mt-2">
+          <div class="card-header">
+            <h5 className="mb-0">Coach Details</h5>
+          </div>
           <div class="card-body">
             <form
               onSubmit={(e) => {

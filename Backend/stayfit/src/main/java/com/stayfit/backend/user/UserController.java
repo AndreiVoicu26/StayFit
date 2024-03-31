@@ -40,6 +40,13 @@ public class UserController {
         return ResponseEntity.ok(picture);
     }
 
+    @DeleteMapping("/picture")
+    public ResponseEntity<?> deleteProfilePicture() {
+        userService.deleteProfilePicture();
+
+        return ResponseEntity.ok("Profile picture deleted successfully");
+    }
+
     @PutMapping("/info")
     public ResponseEntity<?> updateUserInfo(@RequestBody AccountInfoRequest info) {
         userService.updateUserInfo(info);

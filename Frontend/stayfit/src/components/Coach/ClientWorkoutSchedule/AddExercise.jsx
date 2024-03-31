@@ -1,4 +1,5 @@
 import React from "react";
+import { isValidURL } from "../../Utils/ValidURLCheck";
 import axios from "axios";
 
 function AddExercise({
@@ -30,11 +31,6 @@ function AddExercise({
       ...prev,
       [workoutIndex]: false,
     }));
-  };
-
-  const isValidURL = (url) => {
-    const urlRegex = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/;
-    return urlRegex.test(url);
   };
 
   return (

@@ -1,9 +1,6 @@
 package com.stayfit.backend.auth;
 
-import com.stayfit.backend.auth.request.LoginRequest;
-import com.stayfit.backend.auth.request.PasswordResetRequest;
-import com.stayfit.backend.auth.request.PaymentRequest;
-import com.stayfit.backend.auth.request.RegisterRequest;
+import com.stayfit.backend.auth.request.*;
 import com.stayfit.backend.auth.util.CookieUtil;
 import com.stayfit.backend.customer.Customer;
 import com.stayfit.backend.customer.CustomerRepository;
@@ -279,5 +276,15 @@ public class AuthenticationService {
         SecurityContextHolder.clearContext();
 
         return true;
+    }
+
+    public void sendEmail(EmailRequest email) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(email.getEmail());
+        message.setTo("andreivoicu80@gmail.com");
+        message.setSubject(email.getSubject());
+        message.setText("From: " + email.getName() + "\n" + email.getMessage());
+
+        mailSender.send(message);
     }
 }

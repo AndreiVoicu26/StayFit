@@ -1,12 +1,12 @@
 import { React, useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { useAuth } from "../Auth/AuthProvider";
 import PeopleIcon from "@mui/icons-material/People";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useAuth } from "../Auth/AuthProvider";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -14,11 +14,12 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 
 function Navbar() {
-  const location = useLocation();
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
-  const { logout } = useAuth();
-  const [open, setOpen] = useState(false);
+  const { id } = useParams();
   const [picture, setPicture] = useState(null);
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const { logout } = useAuth();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,8 +32,6 @@ function Navbar() {
   const isLinkActive = (to) => {
     return location.pathname === to;
   };
-
-  const { id } = useParams();
 
   const fetchPicture = async () => {
     try {
@@ -83,18 +82,18 @@ function Navbar() {
         <nav class="nav">
           <div>
             <div class="nav_logo">
-              <img class="img-fluid" src="/../images/logo_2.png" />
+              <img class="img-fluid" src="/images/logo_2.png" />
             </div>
-            {id != null ? (
-              <>
-                <Link
-                  to="/clients"
-                  className={`nav_link mb-5 ${
-                    isLinkActive("/clients") && "active"
-                  }`}
-                >
-                  <PeopleIcon /> <span>Clients</span>
-                </Link>
+            <Link
+              to="/clients"
+              className={`nav_link mb-5 ${
+                isLinkActive("/clients") && "active"
+              }`}
+            >
+              <PeopleIcon /> <span>Clients</span>
+            </Link>
+            {id != null && (
+              <div>
                 <Link
                   to={`/client/${id}`}
                   className={`nav_link ${
@@ -127,14 +126,7 @@ function Navbar() {
                 >
                   <RestaurantIcon /> <span>Nutrition</span>
                 </Link>
-              </>
-            ) : (
-              <Link
-                to="/clients"
-                className={`nav_link ${isLinkActive("/clients") && "active"}`}
-              >
-                <PeopleIcon /> <span>Clients</span>
-              </Link>
+              </div>
             )}
           </div>
           <Link
@@ -146,8 +138,14 @@ function Navbar() {
           <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Are you sure you want to log out?</DialogTitle>
             <DialogActions>
-              <Button onClick={handleClose}>No</Button>
-              <Button onClick={() => logout()} autoFocus>
+              <Button sx={{ color: "black" }} onClick={handleClose}>
+                No
+              </Button>
+              <Button
+                sx={{ color: "black" }}
+                onClick={() => logout()}
+                autoFocus
+              >
                 Yes
               </Button>
             </DialogActions>

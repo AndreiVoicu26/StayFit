@@ -170,6 +170,21 @@ public class CoachService {
         customerRepository.save(customer);
     }
 
+    public void deleteEvent(Long id, Long eventId) {
+        Customer customer = customerRepository.findById(id)
+                .map(Customer.class::cast)
+                .orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+
+        Event event = customer.getEvents().stream()
+                .filter(e -> e.getId().equals(eventId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Event with id " + eventId + " not found"));
+
+        customer.getEvents().remove(event);
+
+        customerRepository.save(customer);
+    }
+
     public void updateTarget(Long id, TargetRequest target) {
         Customer customer = customerRepository.findById(id)
                 .map(Customer.class::cast)

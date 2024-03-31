@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import UserInfo from "../Profile/UserInfo";
+import UserInfo from "../Profile/UserInfo/UserInfo";
 import BillingInfo from "../Profile/BillingInfo";
-import ChangeCredentials from "../Profile/CredentialsChange";
+import ChangeCredentials from "../Profile/Security/CredentialsChange";
 import DeleteAccount from "../Profile/DeleteAccount";
 import axios from "axios";
 

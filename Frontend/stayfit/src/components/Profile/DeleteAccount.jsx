@@ -50,8 +50,17 @@ function DeleteAccount() {
               Are you sure you want to delete your account?
             </DialogTitle>
             <DialogActions>
-              <Button onClick={() => setOpenAccountDialog(false)}>No</Button>
-              <Button onClick={() => handleDeleteAccount()} autoFocus>
+              <Button
+                sx={{ color: "black" }}
+                onClick={() => setOpenAccountDialog(false)}
+              >
+                No
+              </Button>
+              <Button
+                sx={{ color: "black" }}
+                onClick={() => handleDeleteAccount()}
+                autoFocus
+              >
                 Yes
               </Button>
             </DialogActions>

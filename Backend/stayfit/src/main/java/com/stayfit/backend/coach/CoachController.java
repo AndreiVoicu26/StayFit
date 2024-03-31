@@ -69,6 +69,13 @@ public class CoachController {
         return ResponseEntity.ok("Event updated successfully");
     }
 
+    @DeleteMapping("/client/{id}/event/{eventId}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id, @PathVariable Long eventId) {
+        coachService.deleteEvent(id, eventId);
+
+        return ResponseEntity.ok("Event deleted successfully");
+    }
+
     @PutMapping("/client/{id}/target")
     public ResponseEntity<?> updateTarget(@PathVariable Long id, @RequestBody TargetRequest target) {
         coachService.updateTarget(id, target);

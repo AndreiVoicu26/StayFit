@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
-import Navbar from "./Navbar";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { Link } from "react-router-dom";
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import Navbar from "./Navbar";
 import axios from "axios";
 
 function Clients() {
@@ -14,7 +14,6 @@ function Clients() {
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
     );
-    console.log(clients);
     setClients(filteredClients);
   };
 
@@ -31,7 +30,7 @@ function Clients() {
         console.log("Clients fetched successfully");
       }
     } catch (error) {
-      console.error("Error fetching clients", error);
+      console.log("Error fetching clients", error);
     }
   };
 
@@ -60,7 +59,6 @@ function Clients() {
                 <div className="card-header d-flex justify-content-between form">
                   <input
                     class="form-control fs-5 me-2"
-                    id="inputUsername"
                     type="text"
                     placeholder="Search for name"
                     value={searchQuery}
@@ -87,39 +85,38 @@ function Clients() {
                 </div>
               </div>
             ) : (
-              <>
-                <ResponsiveMasonry
-                  columnsCountBreakPoints={{
-                    400: 1,
-                    600: 2,
-                    800: 3,
-                    1000: 4,
-                    1200: 5,
-                  }}
-                >
-                  <Masonry>
-                    {clients.map((client) => (
-                      <Link to={`/client/${client.id}`}>
-                        <div className="card user">
-                          <div className="card-body text-center">
-                            <div className="img profile mb-2">
-                              <img
-                                src={
-                                  client.profilePicture
-                                    ? `data:image/jpeg;base64,${client.profilePicture}`
-                                    : "https://cdn.vectorstock.com/i/preview-1x/66/14/default-avatar-photo-placeholder-profile-picture-vector-21806614.jpg"
-                                }
-                              />
-                            </div>
-                            <h3 className="mb-0">{client.firstName}</h3>
-                            <h3 className="mb-0">{client.lastName}</h3>
+              <ResponsiveMasonry
+                columnsCountBreakPoints={{
+                  400: 1,
+                  600: 2,
+                  800: 3,
+                  1000: 4,
+                  1200: 5,
+                }}
+              >
+                <Masonry>
+                  {clients.map((client) => (
+                    <Link to={`/client/${client.id}`}>
+                      <div className="card user">
+                        <div className="card-body text-center">
+                          <div className="img profile mb-2">
+                            <img
+                              src={
+                                client.profilePicture
+                                  ? `data:image/jpeg;base64,${client.profilePicture}`
+                                  : "images/user.png"
+                              }
+                              alt="Profile Picture"
+                            />
                           </div>
+                          <h3 className="mb-0">{client.firstName}</h3>
+                          <h3 className="mb-0">{client.lastName}</h3>
                         </div>
-                      </Link>
-                    ))}
-                  </Masonry>
-                </ResponsiveMasonry>
-              </>
+                      </div>
+                    </Link>
+                  ))}
+                </Masonry>
+              </ResponsiveMasonry>
             )}
           </div>
         </div>

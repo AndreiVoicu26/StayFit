@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../Navbar";
-import Schedule from "../../Customer/Schedules/Schedule";
-import MobileSchedule from "../../Customer/Schedules/MobileSchedule";
+import Schedule from "../../Utils/Schedules/Schedule";
+import MobileSchedule from "../../Utils/Schedules/MobileSchedule";
 import Workout from "./Workout";
 import AddWorkout from "./AddWorkout";
 import EditWorkout from "./EditWorkout";
@@ -96,7 +96,7 @@ function ClientWorkoutSchedule() {
             <div className="row align-items-center justify-content-between pt-4">
               <div className="mt-3 ms-md-5">
                 <h1 className="title ms-md-3">
-                  {client.firstName} {client.lastName}'s Workout Schedule
+                  Workout Schedule - {client.firstName} {client.lastName}
                 </h1>
               </div>
             </div>
@@ -104,14 +104,16 @@ function ClientWorkoutSchedule() {
         </div>
         <div className="container px-4 sections">
           <div className="row align-items-stretch ms-md-5">
-            {useCheckMobileScreen() ? (
-              <MobileSchedule
-                activeDay={activeDay}
-                setActiveDay={setActiveDay}
-              />
-            ) : (
-              <Schedule activeDay={activeDay} setActiveDay={setActiveDay} />
-            )}
+            {useCheckMobileScreen()
+              ? workouts && (
+                  <MobileSchedule
+                    activeDay={activeDay}
+                    setActiveDay={setActiveDay}
+                  />
+                )
+              : workouts && (
+                  <Schedule activeDay={activeDay} setActiveDay={setActiveDay} />
+                )}
           </div>
           <div className="row ms-md-5">
             <div className="col-xl-12 mt-lg-3 mb-3">

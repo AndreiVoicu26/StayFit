@@ -8,10 +8,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 
 function Navbar() {
-  const location = useLocation();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-  const { logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const { logout } = useAuth();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,8 +55,14 @@ function Navbar() {
           <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Are you sure you want to log out?</DialogTitle>
             <DialogActions>
-              <Button onClick={handleClose}>No</Button>
-              <Button onClick={() => logout()} autoFocus>
+              <Button sx={{ color: "black" }} onClick={handleClose}>
+                No
+              </Button>
+              <Button
+                sx={{ color: "black" }}
+                onClick={() => logout()}
+                autoFocus
+              >
                 Yes
               </Button>
             </DialogActions>

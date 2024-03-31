@@ -26,7 +26,7 @@ public class Coach {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "coach")
+    @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Customer> customers;
 
     @Column(name = "qualification", nullable = false)

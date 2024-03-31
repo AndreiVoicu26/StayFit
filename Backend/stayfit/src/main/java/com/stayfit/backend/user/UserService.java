@@ -69,6 +69,15 @@ public class UserService implements Serializable {
         return user.getProfilePicture();
     }
 
+    public void deleteProfilePicture() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+
+        user.setProfilePicture(null);
+        userRepository.save(user);
+    }
+
 
     public void updateUserInfo(AccountInfoRequest info) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

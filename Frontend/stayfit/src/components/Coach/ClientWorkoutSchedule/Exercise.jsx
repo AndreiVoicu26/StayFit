@@ -1,4 +1,5 @@
 import React from "react";
+import { isValidURL } from "../../Utils/ValidURLCheck";
 import axios from "axios";
 
 function Exercise({
@@ -29,11 +30,6 @@ function Exercise({
 
   const handleRedirectToLink = (link) => {
     window.location.href = link;
-  };
-
-  const isValidURL = (url) => {
-    const urlRegex = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/;
-    return urlRegex.test(url);
   };
 
   return (
