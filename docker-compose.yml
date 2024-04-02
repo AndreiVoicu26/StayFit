@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=andrei
+      - POSTGRES_PASSWORD=andrei26
+      - POSTGRES_DB=stayfitDB
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  spring-boot-app:
+    build:
+      context: ./Backend/stayFit
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/stayfitDB
+      - SPRING_DATASOURCE_USERNAME=andrei
+      - SPRING_DATASOURCE_PASSWORD=andrei26
+
+  react-app:
+    build:
+      context: ./Frontend/stayfit
+      dockerfile: Dockerfile
+    ports:
+        - "3000:80"
+
+volumes:
+    db-data:
