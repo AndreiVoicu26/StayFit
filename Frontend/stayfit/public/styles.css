@@ -1386,6 +1386,7 @@ p {
   position: relative;
   width: 100%;
   z-index: 0;
+  min-height: 100vh;
 }
 .auth .overlay {
   position: absolute;
@@ -2156,6 +2157,7 @@ p {
   text-align: center;
   border: 2px solid #cd3f3e;
   border-radius: 50%;
+  color: #cd3f3e;
 }
 #coaching .choose .fa:hover {
   background-color: #cd3f3e;

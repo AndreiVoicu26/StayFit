@@ -15,7 +15,9 @@ function NutritionPlan({ meals, mealType, index }) {
             .map((mealElement, mealIndex) => (
               <div key={mealIndex} className="d-flex">
                 <h4 className="mb-0">{mealElement.name}</h4>
-                <h4 className="mb-0 mx-3">{mealElement.details && "-"}</h4>
+                <h4 className="mb-0 mx-3 text-muted">
+                  {mealElement.details && "|"}
+                </h4>
                 <h4 className="mb-0">{mealElement.details}</h4>
                 <hr />
               </div>

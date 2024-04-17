@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAuth } from "../../Auth/AuthProvider";
 
 function PricingSection() {
+  const { authenticated, role, checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   return (
     <div id="pricing">
       <div className="container">
@@ -25,7 +32,19 @@ function PricingSection() {
                 <li>Goals Tracking</li>
               </ul>
               <div>
-                <a href="#">Start Now</a>
+                <a
+                  href={
+                    authenticated
+                      ? role === "CUSTOMER"
+                        ? "/dashboard"
+                        : role === "COACH"
+                        ? "/clients"
+                        : "/management"
+                      : "/login"
+                  }
+                >
+                  Start Now
+                </a>
               </div>
             </div>
           </div>
@@ -43,7 +62,19 @@ function PricingSection() {
                 <li>Goals Tracking</li>
               </ul>
               <div>
-                <a href="#">Start Now</a>
+                <a
+                  href={
+                    authenticated
+                      ? role === "CUSTOMER"
+                        ? "/dashboard"
+                        : role === "COACH"
+                        ? "/clients"
+                        : "/management"
+                      : "/login"
+                  }
+                >
+                  Start Now
+                </a>
               </div>
             </div>
           </div>
@@ -61,7 +92,19 @@ function PricingSection() {
                 <li>Goals Tracking</li>
               </ul>
               <div>
-                <a href="#">Start Now</a>
+                <a
+                  href={
+                    authenticated
+                      ? role === "CUSTOMER"
+                        ? "/dashboard"
+                        : role === "COACH"
+                        ? "/clients"
+                        : "/management"
+                      : "/login"
+                  }
+                >
+                  Start Now
+                </a>
               </div>
             </div>
           </div>

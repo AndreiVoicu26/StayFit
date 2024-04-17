@@ -18,11 +18,13 @@ function Workout({ workoutElement, workoutIndex }) {
               <h4 className="mb-0">{exerciseElement.name}</h4>
               {exerciseElement.link && isValidURL(exerciseElement.link) && (
                 <i
-                  class="fa-solid fa-arrow-up-right-from-square align-items-center fs-4 mx-3 mt-1"
+                  class="fa-solid fa-arrow-up-right-from-square align-items-center fs-4 ms-3 mt-1"
                   onClick={() => handleRedirectToLink(exerciseElement.link)}
                 ></i>
               )}
-              <h4 className="mb-0 me-3">{exerciseElement.details && "-"}</h4>
+              <h4 className="mb-0 mx-3 text-muted">
+                {exerciseElement.details && "|"}
+              </h4>
               <h4 className="mb-0">{exerciseElement.details}</h4>
               <hr />
             </div>
