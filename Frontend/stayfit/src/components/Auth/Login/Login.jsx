@@ -4,6 +4,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import LoggedInCard from "../Utils/LoggedInCard";
+import ExpiredToken from "../Utils/ExpiredToken";
 import ForgotPasswordDialog from "./ForgotPasswordDialog";
 import { validate } from "./LoginValidator";
 import { useAuth } from "../AuthProvider";
@@ -18,7 +19,7 @@ function Login() {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const { authenticated, login, checkAuth } = useAuth();
+  const { authenticated, login, checkAuth, expired } = useAuth();
 
   useEffect(() => {
     checkAuth();
@@ -79,7 +80,11 @@ function Login() {
         <div className="row justify-content-center">
           <div className="col-xl-5 col-lg-6 col-md-8 col-11">
             {authenticated ? (
-              <LoggedInCard />
+              expired ? (
+                <ExpiredToken />
+              ) : (
+                <LoggedInCard />
+              )
             ) : (
               <div className="login-card">
                 <h3 className="mb-3 text-center">Access your account</h3>

@@ -1,6 +1,7 @@
 package com.stayfit.backend.auth;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -64,6 +65,17 @@ public class JwtService {
 
     public boolean isTokenExpired(String token) {
         return !extractClaim(token, Claims::getExpiration).before(new Date());
+    }
+
+    public boolean isTokenExpiringSoon(String token) {
+        try {
+            Date expiration = extractClaim(token, Claims::getExpiration);
+            Date now = new Date();
+            long diff = expiration.getTime() - now.getTime();
+            return diff < 1800000;
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 
     public boolean isRefreshToken(String token) {

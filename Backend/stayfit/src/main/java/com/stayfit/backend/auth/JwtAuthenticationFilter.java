@@ -3,6 +3,7 @@ package com.stayfit.backend.auth;
 import com.stayfit.backend.auth.util.CookieUtil;
 import com.stayfit.backend.exception.CookieNotFoundException;
 import com.stayfit.backend.user.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,6 +60,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (CookieNotFoundException | UsernameNotFoundException e) {
             if (!request.getServletPath().equals("/api/v1/auth/check-authentication") && !request.getServletPath().equals("/api/v1/auth/check-status")) {
+                throw e;
+            }
+
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            if (request.getServletPath().equals("/api/v1/auth/refresh-token")) {
                 throw e;
             }
 

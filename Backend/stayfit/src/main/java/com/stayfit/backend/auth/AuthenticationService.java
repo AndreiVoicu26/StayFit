@@ -142,13 +142,14 @@ public class AuthenticationService {
         }
     }
 
-    public Map<String, Object> checkAuthenticationState() {
+    public Map<String, Object> checkAuthenticationState(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Map<String, Object> response = new HashMap<>();
 
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
             response.put("authenticated", authentication.isAuthenticated());
             response.put("role", userService.getRoleFromAuthentication(authentication));
+            response.put("expired", jwtService.isTokenExpiringSoon(CookieUtil.getCookieValue(request, "accessToken")));
         } else {
             response.put("authenticated", false);
             response.put("role", "");

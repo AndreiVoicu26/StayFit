@@ -7,6 +7,7 @@ const AuthContext = createContext({
   role: "",
   status: "",
   loading: true,
+  expired: false,
   login: () => {},
   register: () => {},
   pay: () => {},
@@ -20,6 +21,7 @@ const AuthProvider = ({ children }) => {
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
+  const [expired, setExpired] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,6 +34,10 @@ const AuthProvider = ({ children }) => {
       );
       setAuthenticated(response.data.authenticated);
       setRole(response.data.role);
+      if (response.data.expired === true) {
+        setExpired(true);
+        navigate("/login");
+      }
     } catch (error) {
       setAuthenticated(false);
       console.error("Error checking authentication status:", error);
@@ -178,6 +184,7 @@ const AuthProvider = ({ children }) => {
         role,
         status,
         loading,
+        expired,
         login,
         register,
         pay,

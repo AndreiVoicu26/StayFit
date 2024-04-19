@@ -45,8 +45,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/check-authentication")
-    public ResponseEntity<?> isAuthenticated() {
-        Map<String, Object> res = authenticationService.checkAuthenticationState();
+    public ResponseEntity<?> isAuthenticated(HttpServletRequest request) {
+        Map<String, Object> res = authenticationService.checkAuthenticationState(request);
 
         return ResponseEntity.ok(res);
     }
