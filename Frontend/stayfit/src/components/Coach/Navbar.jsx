@@ -11,6 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import CoachChat from "../Utils/CoachChat";
 import axios from "axios";
 
 function Navbar() {
@@ -152,6 +153,11 @@ function Navbar() {
           </Dialog>
         </nav>
       </div>
+      {id != null && (
+        <div id="chat">
+          <CoachChat clientId={id} />
+        </div>
+      )}
     </div>
   );
 }

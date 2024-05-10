@@ -12,10 +12,12 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import CustomerChat from "../Utils/CustomerChat";
 import axios from "axios";
 
 function Navbar() {
   const [picture, setPicture] = useState(null);
+  const [coach, setCoach] = useState(null);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -52,8 +54,25 @@ function Navbar() {
     }
   };
 
+  const fetchCoach = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/v1/customer/coach",
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setCoach(response.data);
+      }
+    } catch (error) {
+      console.log("Error fetching coach ", error);
+    }
+  };
+
   useEffect(() => {
     fetchPicture();
+    fetchCoach();
   }, []);
 
   return (
@@ -144,6 +163,11 @@ function Navbar() {
           </Dialog>
         </nav>
       </div>
+      {coach != null && (
+        <div id="chat">
+          <CustomerChat />
+        </div>
+      )}
     </div>
   );
 }

@@ -109,6 +109,7 @@ function BillingInfo() {
                   class="d-flex align-items-center"
                   href="#"
                   onClick={() => handleChangeMembership("ONE_MONTH")}
+                  style={{ color: "#cd3f3e" }}
                 >
                   Switch to monthly plan - $59.99 / month
                   <i class="fa-solid fa-arrow-right-long ms-2"></i>
@@ -120,6 +121,7 @@ function BillingInfo() {
                   class="d-flex align-items-center"
                   href="#"
                   onClick={() => handleChangeMembership("SIX_MONTHS")}
+                  style={{ color: "#cd3f3e" }}
                 >
                   Switch to 6 months plan - $329.99 / 6 months
                   <i class="fa-solid fa-arrow-right-long ms-2"></i>
@@ -131,6 +133,7 @@ function BillingInfo() {
                   class="d-flex align-items-center"
                   href="#"
                   onClick={() => handleChangeMembership("ONE_YEAR")}
+                  style={{ color: "#cd3f3e" }}
                 >
                   Switch to yearly plan - $599.99 / year
                   <i class="fa-solid fa-arrow-right-long ms-2"></i>

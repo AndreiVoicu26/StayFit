@@ -84,21 +84,19 @@ public class CoachService {
                 .map(Customer.class::cast)
                 .orElseThrow(() -> new CustomerNotFoundException("Customer with id " + id + " not found"));
 
-        Map<String, String> user = Map.of(
-                "id", String.valueOf(customer.getId()),
-                "firstName", customer.getUser().getFirstName(),
-                "lastName", customer.getUser().getLastName(),
-                "email", customer.getUser().getEmail(),
-                "phone", customer.getUser().getPhone() != null ? customer.getUser().getPhone() : "",
-                "dateOfBirth", customer.getUser().getDateOfBirth() != null ? customer.getUser().getDateOfBirth().toString() : "",
-                "profilePicture", customer.getUser().getProfilePicture() != null ?
-                        Base64.getEncoder().encodeToString(customer.getUser().getProfilePicture()) : "",
-                "targetWeight", customer.getTargetWeight() != null ?
-                        String.valueOf(customer.getTargetWeight()) : "",
-                "targetWorkout", customer.getTargetWorkout() != null ?
-                        String.valueOf(customer.getTargetWorkout()) : "",
-                "targetCalories", customer.getTargetCalories() != null ?
-                        String.valueOf(customer.getTargetCalories()) : ""
+        Map<String, String> user = Map.ofEntries(
+                Map.entry("id", String.valueOf(customer.getId())),
+                Map.entry("userId", String.valueOf(customer.getUser().getId())),
+                Map.entry("firstName", customer.getUser().getFirstName()),
+                Map.entry("lastName", customer.getUser().getLastName()),
+                Map.entry("email", customer.getUser().getEmail()),
+                Map.entry("phone", customer.getUser().getPhone() != null ? customer.getUser().getPhone() : ""),
+                Map.entry("dateOfBirth", customer.getUser().getDateOfBirth() != null ? customer.getUser().getDateOfBirth().toString() : ""),
+                Map.entry("profilePicture", customer.getUser().getProfilePicture() != null ?
+                        Base64.getEncoder().encodeToString(customer.getUser().getProfilePicture()) : ""),
+                Map.entry("targetWeight", customer.getTargetWeight() != null ? String.valueOf(customer.getTargetWeight()) : ""),
+                Map.entry("targetWorkout", customer.getTargetWorkout() != null ? String.valueOf(customer.getTargetWorkout()) : ""),
+                Map.entry("targetCalories", customer.getTargetCalories() != null ? String.valueOf(customer.getTargetCalories()) : "")
         );
 
         return user;

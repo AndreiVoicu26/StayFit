@@ -52,7 +52,7 @@ public class AuthenticationService {
                 .role(Role.CUSTOMER)
                 .build();
 
-        if (userRepository.existsByEmail(user.getUsername())) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("A user with username " + user.getUsername() + " already exists");
         }
         if (userRepository.existsByEmail(user.getEmail())) {

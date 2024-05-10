@@ -154,6 +154,7 @@ public class CustomerService {
 
         Map<String, String> user = Map.of(
                 "id", String.valueOf(customer.getCoach().getId()),
+                "userId", String.valueOf(customer.getCoach().getUser().getId()),
                 "firstName", customer.getCoach().getUser().getFirstName(),
                 "lastName", customer.getCoach().getUser().getLastName(),
                 "qualification", customer.getCoach().getQualification(),

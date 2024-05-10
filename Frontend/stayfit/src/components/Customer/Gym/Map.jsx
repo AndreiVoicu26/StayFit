@@ -66,7 +66,7 @@ function Map() {
           <MapContainer
             center={[45.754041274166866, 21.22584833899618]}
             zoom={12}
-            style={{ height: "400px" }}
+            style={{ height: "400px", zIndex: 0 }}
             attributionControl={false}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />

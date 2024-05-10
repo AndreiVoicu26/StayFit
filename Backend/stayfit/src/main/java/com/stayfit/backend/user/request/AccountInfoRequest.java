@@ -1,5 +1,6 @@
 package com.stayfit.backend.user.request;
 
+import com.stayfit.backend.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountInfoRequest {
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;

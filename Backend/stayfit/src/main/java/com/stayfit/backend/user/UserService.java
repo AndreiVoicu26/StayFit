@@ -99,6 +99,7 @@ public class UserService implements Serializable {
                 .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
 
         return AccountInfoRequest.builder()
+                .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
