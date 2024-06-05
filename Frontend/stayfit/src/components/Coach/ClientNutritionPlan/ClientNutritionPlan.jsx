@@ -7,6 +7,7 @@ import Meal from "./Meal";
 import AddMeal from "./AddMeal";
 import EditMeal from "./EditMeal";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ClientNutritionPlan() {
   const { id } = useParams();
@@ -40,12 +41,9 @@ function ClientNutritionPlan() {
 
   const fetchClient = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/v1/coach/client/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/coach/client/${id}`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setClient(response.data);
         console.log("Client fetched successfully");
@@ -58,7 +56,7 @@ function ClientNutritionPlan() {
   const fetchMeals = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/coach/client/${id}/meals/${activeDay}`,
+        `${API_URL}/api/v1/coach/client/${id}/meals/${activeDay}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

@@ -5,6 +5,7 @@ import Schedule from "../../Utils/Schedules/Schedule";
 import MobileSchedule from "../../Utils/Schedules/MobileSchedule";
 import Workout from "./Workout";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function WorkoutSchedule() {
   const [activeDay, setActiveDay] = useState(null);
@@ -13,7 +14,7 @@ function WorkoutSchedule() {
   const fetchWorkouts = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/customer/workouts/${activeDay}`,
+        `${API_URL}/api/v1/customer/workouts/${activeDay}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

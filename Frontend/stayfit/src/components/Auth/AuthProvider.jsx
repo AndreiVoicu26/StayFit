@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import API_URL from "../../config";
 
 const AuthContext = createContext({
   authenticated: false,
@@ -29,7 +30,7 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/auth/check-authentication",
+        `${API_URL}/api/v1/auth/check-authentication`,
         { withCredentials: true }
       );
       setAuthenticated(response.data.authenticated);
@@ -49,10 +50,9 @@ const AuthProvider = ({ children }) => {
   const checkStatus = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/auth/check-status",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/auth/check-status`, {
+        withCredentials: true,
+      });
       setStatus(response.data);
     } catch (error) {
       setAuthenticated(false);
@@ -66,7 +66,7 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/register",
+        `${API_URL}/api/v1/auth/register`,
         credentials,
         { withCredentials: true }
       );
@@ -89,7 +89,7 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/payment",
+        `${API_URL}/api/v1/auth/payment`,
         membershipType,
         { withCredentials: true }
       );
@@ -113,7 +113,7 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
+        `${API_URL}/api/v1/auth/login`,
         credentials,
         {
           withCredentials: true,
@@ -153,7 +153,7 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/logout",
+        `${API_URL}/api/v1/auth/logout`,
         {},
         {
           withCredentials: true,

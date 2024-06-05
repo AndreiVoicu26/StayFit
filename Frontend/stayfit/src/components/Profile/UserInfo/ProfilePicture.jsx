@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ProfilePicture() {
   const [picture, setPicture] = useState(null);
@@ -20,7 +21,7 @@ function ProfilePicture() {
             formData.append("picture", file);
 
             axios
-              .put("http://localhost:8080/api/v1/user/picture", formData, {
+              .put(`${API_URL}/api/v1/user/picture`, formData, {
                 withCredentials: true,
               })
               .then((response) => {
@@ -43,10 +44,9 @@ function ProfilePicture() {
 
   const handleRemovePicture = async () => {
     try {
-      const response = await axios.delete(
-        "http://localhost:8080/api/v1/user/picture",
-        { withCredentials: true }
-      );
+      const response = await axios.delete(`${API_URL}/api/v1/user/picture`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setPicture(null);
         console.log("Picture removed successfully");
@@ -58,13 +58,10 @@ function ProfilePicture() {
 
   const fetchPicture = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/user/picture",
-        {
-          responseType: "blob",
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/user/picture`, {
+        responseType: "blob",
+        withCredentials: true,
+      });
       if (response.status === 200) {
         if (response.data.size !== 0) {
           setPicture(response.data);

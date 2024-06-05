@@ -10,6 +10,7 @@ import Exercise from "./Exercise";
 import AddExercise from "./AddExercise";
 import EditExercise from "./EditExercise";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ClientWorkoutSchedule() {
   const { id } = useParams();
@@ -51,12 +52,9 @@ function ClientWorkoutSchedule() {
 
   const fetchClient = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/v1/coach/client/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/coach/client/${id}`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setClient(response.data);
         console.log("Client fetched successfully");
@@ -69,7 +67,7 @@ function ClientWorkoutSchedule() {
   const fetchWorkouts = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/coach/client/${id}/workouts/${activeDay}`,
+        `${API_URL}/api/v1/coach/client/${id}/workouts/${activeDay}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

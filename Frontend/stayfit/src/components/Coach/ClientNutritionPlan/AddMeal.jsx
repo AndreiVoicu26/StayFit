@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function AddMeal({
   clientId,
@@ -13,7 +14,7 @@ function AddMeal({
   const handleAddMeal = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/meal`,
+        `${API_URL}/api/v1/coach/client/${clientId}/meal`,
         meal,
         { withCredentials: true }
       );

@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
+import API_URL from "../../config";
 
 function CoachInfo() {
   const [coachInfo, setCoachInfo] = useState({
@@ -10,7 +11,7 @@ function CoachInfo() {
   const handleUpdateCoachInfo = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/v1/coach/info",
+        `${API_URL}/api/v1/coach/info`,
         coachInfo,
         { withCredentials: true }
       );
@@ -24,10 +25,9 @@ function CoachInfo() {
 
   const fetchCoachInfo = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/coach/info",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/coach/info`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setCoachInfo(response.data);
       }

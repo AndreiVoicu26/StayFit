@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import Navbar from "./Navbar";
 import axios from "axios";
+import API_URL from "../../config";
 
 function Clients() {
   const [clients, setClients] = useState([]);
@@ -19,12 +20,9 @@ function Clients() {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/coach/clients",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/coach/clients`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setClients(response.data);
         console.log("Clients fetched successfully");

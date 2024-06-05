@@ -6,6 +6,7 @@ import Events from "./Events";
 import EventDialog from "./EventDialog";
 import DashboardNavbar from "./DashboardNavbar";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function Dashboard() {
   const [profile, setProfile] = useState({});
@@ -24,12 +25,9 @@ function Dashboard() {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/profile",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/profile`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setProfile(response.data);
       }
@@ -40,10 +38,9 @@ function Dashboard() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/events",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/events`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setEvents(response.data);
         console.log("Events fetched successfully");

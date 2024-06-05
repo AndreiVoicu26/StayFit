@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthProvider";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ExpiredToken() {
   const { logout, role } = useAuth();
@@ -10,7 +11,7 @@ function ExpiredToken() {
   const refreshToken = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/refresh-token",
+        `${API_URL}/api/v1/auth/refresh-token`,
         {},
         { withCredentials: true }
       );

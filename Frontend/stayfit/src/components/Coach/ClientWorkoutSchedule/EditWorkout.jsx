@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function EditWorkout({
   clientId,
@@ -12,7 +13,7 @@ function EditWorkout({
   const handleEditWorkout = async (workoutId) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/workout/${workoutId}`,
+        `${API_URL}/api/v1/coach/client/${clientId}/workout/${workoutId}`,
         workout,
         { withCredentials: true }
       );

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { isValidURL } from "../../Utils/ValidURLCheck";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function EventDialog({
   clientId,
@@ -17,7 +18,7 @@ function EventDialog({
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/event`,
+        `${API_URL}/api/v1/coach/client/${clientId}/event`,
         event,
         {
           withCredentials: true,
@@ -38,7 +39,7 @@ function EventDialog({
   const handleUpdateEvent = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/event/${event.id}`,
+        `${API_URL}/api/v1/coach/client/${clientId}/event/${event.id}`,
         event,
         {
           withCredentials: true,

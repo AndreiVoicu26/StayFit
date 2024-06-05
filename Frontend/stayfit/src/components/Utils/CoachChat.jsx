@@ -3,6 +3,7 @@ import Talk from "talkjs";
 import { useCallback } from "react";
 import { Session, Popup } from "@talkjs/react";
 import axios from "axios";
+import API_URL from "../../config";
 
 function CoachChat({ clientId }) {
   const [coach, setCoach] = useState(null);
@@ -11,15 +12,12 @@ function CoachChat({ clientId }) {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const coachResponse = await axios.get(
-          "http://localhost:8080/api/v1/user/info",
-          {
-            withCredentials: true,
-          }
-        );
+        const coachResponse = await axios.get(`${API_URL}/api/v1/user/info`, {
+          withCredentials: true,
+        });
 
         const customerResponse = await axios.get(
-          `http://localhost:8080/api/v1/coach/client/${clientId}`,
+          `${API_URL}/api/v1/coach/client/${clientId}`,
           {
             withCredentials: true,
           }

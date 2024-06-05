@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ClientGoals({ clientId, target, setTarget, fetchClient }) {
   const handleSaveGoals = async (e) => {
@@ -7,7 +8,7 @@ function ClientGoals({ clientId, target, setTarget, fetchClient }) {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/target`,
+        `${API_URL}/api/v1/coach/client/${clientId}/target`,
         target,
         {
           withCredentials: true,

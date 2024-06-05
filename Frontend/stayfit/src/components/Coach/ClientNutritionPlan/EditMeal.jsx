@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function EditMeal({
   clientId,
@@ -12,7 +13,7 @@ function EditMeal({
   const handleEditMeal = async (mealId) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/meal/${mealId}`,
+        `${API_URL}/api/v1/coach/client/${clientId}/meal/${mealId}`,
         meal,
         { withCredentials: true }
       );

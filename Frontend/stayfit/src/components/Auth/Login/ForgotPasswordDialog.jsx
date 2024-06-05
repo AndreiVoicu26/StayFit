@@ -7,12 +7,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ForgotPasswordDialog({ open, setOpen }) {
   const handleForgetPassword = async (email) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/auth/forgot-password?email=${email}`,
+        `${API_URL}/api/v1/auth/forgot-password?email=${email}`,
         {},
         { withCredentials: true }
       );

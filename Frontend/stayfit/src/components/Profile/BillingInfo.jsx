@@ -6,6 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
+import API_URL from "../../config";
 
 function BillingInfo() {
   const [billingInfo, setBillingInfo] = useState({
@@ -30,7 +31,7 @@ function BillingInfo() {
     }
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/v1/customer/billing",
+        `${API_URL}/api/v1/customer/billing`,
         { membershipType },
         { withCredentials: true }
       );
@@ -46,7 +47,7 @@ function BillingInfo() {
   const handleCancelMembership = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/v1/customer/deactivate-account",
+        `${API_URL}/api/v1/customer/deactivate-account`,
         {},
         { withCredentials: true }
       );
@@ -61,10 +62,9 @@ function BillingInfo() {
 
   const fetchBillingInfo = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/billing",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/billing`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setBillingInfo(response.data);
       }

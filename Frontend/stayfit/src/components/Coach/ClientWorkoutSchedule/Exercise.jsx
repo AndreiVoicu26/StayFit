@@ -1,6 +1,7 @@
 import React from "react";
 import { isValidURL } from "../../Utils/ValidURLCheck";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function Exercise({
   clientId,
@@ -16,7 +17,7 @@ function Exercise({
   const handleRemoveExercise = async (workoutId, exerciseId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/workout/${workoutId}/exercise/${exerciseId}`,
+        `${API_URL}/api/v1/coach/client/${clientId}/workout/${workoutId}/exercise/${exerciseId}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

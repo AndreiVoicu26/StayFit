@@ -4,6 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function CoachesTable({ coachesData, fetchCoaches }) {
   const [userToDelete, setUserToDelete] = useState({});
@@ -26,7 +27,7 @@ function CoachesTable({ coachesData, fetchCoaches }) {
   const handleDeleteCoach = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/admin/coach/${id}`,
+        `${API_URL}/api/v1/admin/coach/${id}`,
         {
           withCredentials: true,
         }

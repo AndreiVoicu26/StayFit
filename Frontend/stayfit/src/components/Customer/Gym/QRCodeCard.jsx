@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import QRCode from "qrcode.react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function QRCodeCard() {
   const [profile, setProfile] = useState({});
@@ -8,10 +9,9 @@ function QRCodeCard() {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/profile",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/profile`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setProfile(response.data);
       }
@@ -22,10 +22,9 @@ function QRCodeCard() {
 
   const fetchBillingInfo = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/billing",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/billing`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setBillingInfo(response.data);
       }

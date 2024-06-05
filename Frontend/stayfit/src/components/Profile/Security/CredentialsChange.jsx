@@ -7,6 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { validate } from "./CredentialsValidator";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function CredentialsChange() {
   const [credentials, setCredentials] = useState({
@@ -23,7 +24,7 @@ function CredentialsChange() {
   const handleChangeCredentials = async () => {
     try {
       const response = await axios.put(
-        "http://localhost:8080/api/v1/user/credentials",
+        `${API_URL}/api/v1/user/credentials`,
         credentials,
         { withCredentials: true }
       );

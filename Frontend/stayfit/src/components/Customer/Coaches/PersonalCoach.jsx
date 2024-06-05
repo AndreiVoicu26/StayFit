@@ -1,13 +1,13 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function PersonalCoach({ personalCoach, fetchPersonalCoach }) {
   const handleRemoveCoach = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/api/v1/customer/coach`,
-        { withCredentials: true }
-      );
+      const response = await axios.delete(`${API_URL}/api/v1/customer/coach`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         console.log("Coach deleted successfully");
         fetchPersonalCoach();

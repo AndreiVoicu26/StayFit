@@ -7,6 +7,7 @@ import WeightChart from "./WeightChart";
 import CaloriesChart from "./CaloriesChart";
 import WorkoutChart from "./WorkoutChart";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function Tracker() {
   const [profile, setProfile] = useState({});
@@ -21,12 +22,9 @@ function Tracker() {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/profile",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/profile`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setProfile(response.data);
       }
@@ -37,12 +35,9 @@ function Tracker() {
 
   const fetchRecords = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/records",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/records`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setRecords(response.data);
         const currentRecord = response.data.find(

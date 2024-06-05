@@ -8,6 +8,7 @@ import ExpiredToken from "../Utils/ExpiredToken";
 import ForgotPasswordDialog from "./ForgotPasswordDialog";
 import { validate } from "./LoginValidator";
 import { useAuth } from "../AuthProvider";
+import API_URL from "../../../config";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -189,14 +190,14 @@ function Login() {
                 <p className="w-100 text-center">Or Sign In With</p>
                 <div className="social d-flex text-center">
                   <a
-                    href="http://localhost:8080/oauth2/authorization/google"
+                    href={`${API_URL}/oauth2/authorization/google`}
                     className="px-2 py-2 me-3 rounded"
                   >
                     <i class="fa-brands fa-google me-2"></i>
                     Google
                   </a>
                   <a
-                    href="http://localhost:8080/oauth2/authorization/facebook"
+                    href={`${API_URL}/oauth2/authorization/facebook`}
                     className="px-2 py-2 ms-3 rounded"
                   >
                     <i class="fa-brands fa-facebook me-2"></i>

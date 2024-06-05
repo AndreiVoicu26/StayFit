@@ -5,6 +5,7 @@ import BillingInfo from "../Profile/BillingInfo";
 import ChangeCredentials from "../Profile/Security/CredentialsChange";
 import DeleteAccount from "../Profile/DeleteAccount";
 import axios from "axios";
+import API_URL from "../../config";
 
 function Profile() {
   const [isOAuthUser, setIsOAuthUser] = useState(false);
@@ -12,7 +13,7 @@ function Profile() {
   const checkOAuthUser = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/check-oauth2-user",
+        `${API_URL}/api/v1/customer/check-oauth2-user`,
         { withCredentials: true }
       );
       if (response.status === 200) {

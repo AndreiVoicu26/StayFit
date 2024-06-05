@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function AddCoach({ setAddCoach, fetchCoaches }) {
   const [coach, setCoach] = useState({
@@ -16,7 +17,7 @@ function AddCoach({ setAddCoach, fetchCoaches }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/admin/coach",
+        `${API_URL}/api/v1/admin/coach`,
         coach,
         {
           withCredentials: true,

@@ -5,6 +5,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -24,7 +25,7 @@ function ResetPassword() {
       let body = { password, token };
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/v1/auth/reset-password",
+          `${API_URL}/api/v1/auth/reset-password`,
           body,
           { withCredentials: true }
         );

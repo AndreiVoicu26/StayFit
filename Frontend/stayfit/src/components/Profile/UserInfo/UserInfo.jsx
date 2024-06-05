@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import ProfilePicture from "./ProfilePicture";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function UserInfo() {
   const [accountInfo, setAccountInfo] = useState({
@@ -15,7 +16,7 @@ function UserInfo() {
     try {
       console.log(accountInfo);
       const response = await axios.put(
-        "http://localhost:8080/api/v1/user/info",
+        `${API_URL}/api/v1/user/info`,
         accountInfo,
         { withCredentials: true }
       );
@@ -29,10 +30,9 @@ function UserInfo() {
 
   const fetchAccountInfo = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/user/info",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/user/info`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setAccountInfo(response.data);
       }

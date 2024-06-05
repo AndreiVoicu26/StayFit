@@ -3,6 +3,7 @@ import Navbar from "../Navbar";
 import PersonalCoach from "./PersonalCoach";
 import AvailableCoach from "./AvailableCoach";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function Coaches() {
   const [personalCoach, setPersonalCoach] = useState(null);
@@ -10,10 +11,9 @@ function Coaches() {
 
   const fetchCoaches = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/coaches",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/coaches`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setCoaches(response.data);
         console.log("Coaches fetched successfully");
@@ -25,10 +25,9 @@ function Coaches() {
 
   const fetchPersonalCoach = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/customer/coach",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/customer/coach`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         if (response.data !== "") {
           setPersonalCoach(response.data);

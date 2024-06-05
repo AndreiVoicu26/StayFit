@@ -4,6 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function CustomersTable({ customersData, fetchCustomers }) {
   const [userToDelete, setUserToDelete] = useState({});
@@ -21,7 +22,7 @@ function CustomersTable({ customersData, fetchCustomers }) {
   const handleDeleteCustomer = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/admin/customer/${id}`,
+        `${API_URL}/api/v1/admin/customer/${id}`,
         {
           withCredentials: true,
         }
@@ -39,7 +40,7 @@ function CustomersTable({ customersData, fetchCustomers }) {
   const handleDeactivateCustomer = async (id) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/v1/admin/customer/${id}`,
+        `${API_URL}/api/v1/admin/customer/${id}`,
         {},
         {
           withCredentials: true,

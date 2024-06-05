@@ -1,6 +1,7 @@
 import React from "react";
 import { isValidURL } from "../../Utils/ValidURLCheck";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function Events({
   setEvent,
@@ -12,7 +13,7 @@ function Events({
   const handleDeleteEvent = async (eventId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/customer/event/${eventId}`,
+        `${API_URL}/api/v1/customer/event/${eventId}`,
         {
           withCredentials: true,
         }

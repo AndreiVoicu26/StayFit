@@ -4,6 +4,7 @@ import AddCoach from "./Coaches/AddCoach";
 import CoachesTable from "./Coaches/CoachesTable";
 import CustomersTable from "./Customers/CustomersTable";
 import axios from "axios";
+import API_URL from "../../config";
 
 function AdminDashboard() {
   const [coachesView, setCoachesView] = useState(true);
@@ -13,12 +14,9 @@ function AdminDashboard() {
 
   const fetchCoaches = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/admin/coaches",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/admin/coaches`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setCoachesData(response.data);
       }
@@ -29,12 +27,9 @@ function AdminDashboard() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/admin/customers",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/admin/customers`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setCustomersData(response.data);
       }

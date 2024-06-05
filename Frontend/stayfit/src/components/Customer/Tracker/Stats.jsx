@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function Stats({ record, setRecord, fetchRecords }) {
   const handleSaveRecord = async (e) => {
@@ -7,7 +8,7 @@ function Stats({ record, setRecord, fetchRecords }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/customer/record",
+        `${API_URL}/api/v1/customer/record`,
         record,
         { withCredentials: true }
       );

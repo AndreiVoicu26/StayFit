@@ -5,6 +5,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
+import API_URL from "../../config";
 
 function DeleteAccount() {
   const [openAccountDialog, setOpenAccountDialog] = useState(false);
@@ -13,7 +14,7 @@ function DeleteAccount() {
   const handleDeleteAccount = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:8080/api/v1/customer/account",
+        `${API_URL}/api/v1/customer/account`,
         { withCredentials: true }
       );
       if (response.status === 200) {

@@ -6,6 +6,7 @@ import WeightChart from "../../Customer/Tracker/WeightChart";
 import CaloriesChart from "../../Customer/Tracker/CaloriesChart";
 import WorkoutChart from "../../Customer/Tracker/WorkoutChart";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ClientTracker() {
   const { id } = useParams();
@@ -19,12 +20,9 @@ function ClientTracker() {
 
   const fetchClient = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/v1/coach/client/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/coach/client/${id}`, {
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setClient(response.data);
         setTarget({
@@ -42,7 +40,7 @@ function ClientTracker() {
   const fetchRecords = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/coach/client/${id}/records`,
+        `${API_URL}/api/v1/coach/client/${id}/records`,
         {
           withCredentials: true,
         }

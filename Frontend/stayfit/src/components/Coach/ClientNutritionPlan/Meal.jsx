@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function Meal({
   clientId,
@@ -13,7 +14,7 @@ function Meal({
   const handleRemoveMeal = async (mealId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/meal/${mealId}`,
+        `${API_URL}/api/v1/coach/client/${clientId}/meal/${mealId}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

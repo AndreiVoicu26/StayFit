@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function ContactSection() {
   const [content, setContent] = useState({
@@ -14,7 +15,7 @@ function ContactSection() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/send-email",
+        `${API_URL}/api/v1/auth/send-email`,
         content,
         { withCredentials: true }
       );

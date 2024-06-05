@@ -1,6 +1,7 @@
 import React from "react";
 import { isValidURL } from "../../Utils/ValidURLCheck";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function AddExercise({
   clientId,
@@ -14,7 +15,7 @@ function AddExercise({
   const handleAddExercise = async (workoutId, workoutIndex) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/coach/client/${clientId}/workout/${workoutId}/exercise`,
+        `${API_URL}/api/v1/coach/client/${clientId}/workout/${workoutId}/exercise`,
         exercise,
         { withCredentials: true }
       );

@@ -1,10 +1,11 @@
 import axios from "axios";
+import API_URL from "../../../config";
 
 export const validate = (credentials, setFormErrors, setIsFormValid) => {
   const checkUsername = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/auth/check-username?username=${credentials.newUsername}`
+        `${API_URL}/api/v1/auth/check-username?username=${credentials.newUsername}`
       );
       if (!response.data.isUsernameAvailable) {
         setIsFormValid(false);

@@ -13,6 +13,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import CoachChat from "../Utils/CoachChat";
 import axios from "axios";
+import API_URL from "../../config";
 
 function Navbar() {
   const { id } = useParams();
@@ -36,13 +37,10 @@ function Navbar() {
 
   const fetchPicture = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/api/v1/user/picture",
-        {
-          responseType: "blob",
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/v1/user/picture`, {
+        responseType: "blob",
+        withCredentials: true,
+      });
       if (response.status === 200) {
         if (response.data.size !== 0) {
           setPicture(response.data);

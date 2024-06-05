@@ -5,6 +5,7 @@ import Schedule from "../../Utils/Schedules/Schedule";
 import MobileSchedule from "../../Utils/Schedules/MobileSchedule";
 import Meal from "./Meal";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function NutritionPlan() {
   const [activeDay, setActiveDay] = useState(null);
@@ -13,7 +14,7 @@ function NutritionPlan() {
   const fetchMeals = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/v1/customer/meals/${activeDay}`,
+        `${API_URL}/api/v1/customer/meals/${activeDay}`,
         { withCredentials: true }
       );
       if (response.status === 200) {

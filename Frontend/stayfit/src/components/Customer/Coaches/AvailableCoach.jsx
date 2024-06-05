@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
+import API_URL from "../../../config";
 
 function AvailableCoach({ personalCoach, coach, fetchPersonalCoach }) {
   const handleChooseCoach = async (id) => {
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/customer/coaches/${id}`,
+        `${API_URL}/api/v1/customer/coaches/${id}`,
         {},
         { withCredentials: true }
       );
