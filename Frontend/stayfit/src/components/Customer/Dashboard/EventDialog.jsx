@@ -31,7 +31,13 @@ function EventDialog({
     }
 
     fetchEvents();
-    setEvent({ name: "", details: "", link: "", isCancelled: false, date: "" });
+    setEvent({
+      name: "",
+      details: "",
+      link: "",
+      isCancelled: false,
+      date: date,
+    });
     setEventDialog(false);
   };
 
