@@ -17,6 +17,8 @@ import com.stayfit.backend.workout.Workout;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,7 +66,17 @@ public class CustomerService {
     }
 
     @Scheduled(cron = "0 0 0 * * *")
-    public void updateBillingDate() {
+    public void updateBillingDateAtStart() {
+        customerRepository.findAll().forEach(customer -> {
+            if(customer.getStatus().equals(Status.ACTIVE) && customer.getNextBillingDate().isEqual(LocalDate.now())) {
+                customer.setNextBillingDate(LocalDate.now().plusMonths(customer.getMembershipType().getDurationMonths()));
+                customerRepository.save(customer);
+            }
+        });
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void updateBillingDateScheduled() {
         customerRepository.findAll().forEach(customer -> {
             if(customer.getStatus().equals(Status.ACTIVE) && customer.getNextBillingDate().isEqual(LocalDate.now())) {
                 customer.setNextBillingDate(LocalDate.now().plusMonths(customer.getMembershipType().getDurationMonths()));
