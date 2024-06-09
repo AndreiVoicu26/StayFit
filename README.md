@@ -2,7 +2,11 @@
 
 StayFit is a web application for fitness & nutrition.
 
-## Build with
+## Source Code
+
+GitHub Repository: https://github.com/AndreiVoicu26/StayFit
+
+## Built with
 
 <p>
 <span>
